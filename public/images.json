@@ -1,0 +1,176 @@
+[
+  {
+    "src": "/IMG_20231021_095831.jpg",
+    "alt": "IMG_20231021_095831",
+    "type": ["Views", "Trails"],
+    "description": "A beautiful view or trail"
+  },
+  {
+    "src": "/IMG_20231021_095847.jpg",
+    "alt": "IMG_20231021_095847",
+    "type": ["Signs"],
+    "description": "A scenic sign"
+  },
+  {
+    "src": "/IMG_20231021_100553.jpg",
+    "alt": "IMG_20231021_100553",
+    "type": ["Views", "Basenji"],
+    "description": "A stunning landscape"
+  },
+  {
+    "src": "/IMG_20231021_101858.jpg",
+    "alt": "IMG_20231021_101858",
+    "type": ["Trails"],
+    "description": "A trail scene"
+  },
+  {
+    "src": "/IMG_20231021_103002.jpg",
+    "alt": "IMG_20231021_103002",
+    "type": ["Views", "Signs"],
+    "description": "A scenic view with signs"
+  },
+  {
+    "src": "/IMG_20231021_125934.jpg",
+    "alt": "IMG_20231021_125934",
+    "type": ["Basenji"],
+    "description": "A view featuring a Basenji"
+  },
+  {
+    "src": "/IMG_20231021_130956.jpg",
+    "alt": "IMG_20231021_130956",
+    "type": ["Trails", "Views"],
+    "description": "A serene trail"
+  },
+  {
+    "src": "/IMG_20231029_125128.jpg",
+    "alt": "IMG_20231029_125128",
+    "type": ["Signs", "Basenji"],
+    "description": "A Basenji with a sign"
+  },
+  {
+    "src": "/IMG_20231029_133448.jpg",
+    "alt": "IMG_20231029_133448",
+    "type": ["Views"],
+    "description": "A beautiful mountain range"
+  },
+  {
+    "src": "/IMG_20231029_133936.jpg",
+    "alt": "IMG_20231029_133936",
+    "type": ["Trails", "Signs"],
+    "description": "A trail with a sign"
+  },
+  {
+    "src": "/IMG_20231029_133955.jpg",
+    "alt": "IMG_20231029_133955",
+    "type": ["Basenji"],
+    "description": "A playful Basenji"
+  },
+  {
+    "src": "/IMG_20231105_110534.jpg",
+    "alt": "IMG_20231105_110534",
+    "type": ["Views", "Trails"],
+    "description": "A view along the trail"
+  },
+  {
+    "src": "/IMG_20231105_110535.jpg",
+    "alt": "IMG_20231105_110535",
+    "type": ["Signs"],
+    "description": "Another park sign"
+  },
+  {
+    "src": "/IMG_20231105_112153.jpg",
+    "alt": "IMG_20231105_112153",
+    "type": ["Basenji", "Views"],
+    "description": "A Basenji enjoying the view"
+  },
+  {
+    "src": "/IMG_20231105_112931.jpg",
+    "alt": "IMG_20231105_112931",
+    "type": ["Trails"],
+    "description": "Another forest trail"
+  },
+  {
+    "src": "/IMG_20231105_114837.jpg",
+    "alt": "IMG_20231105_114837",
+    "type": ["Views", "Signs"],
+    "description": "A scenic spot with a sign"
+  },
+  {
+    "src": "/IMG_20231207_162957-EFFECTS.jpg",
+    "alt": "IMG_20231207_162957-EFFECTS",
+    "type": ["Basenji"],
+    "description": "A Basenji captured creatively"
+  },
+  {
+    "src": "/IMG_20240303_172354.jpg",
+    "alt": "IMG_20240303_172354",
+    "type": ["Trails", "Views"],
+    "description": "A serene trail"
+  },
+  {
+    "src": "/IMG_20240309_102019.jpg",
+    "alt": "IMG_20240309_102019",
+    "type": ["Signs"],
+    "description": "A national park sign"
+  },
+  {
+    "src": "/IMG_20240309_102311.jpg",
+    "alt": "IMG_20240309_102311",
+    "type": ["Basenji", "Trails"],
+    "description": "A Basenji exploring the trail"
+  },
+  {
+    "src": "/IMG_20240309_122133.jpg",
+    "alt": "IMG_20240309_122133",
+    "type": ["Views"],
+    "description": "A majestic view"
+  },
+  {
+    "src": "/IMG_20240309_133601.jpg",
+    "alt": "IMG_20240309_133601",
+    "type": ["Signs", "Basenji"],
+    "description": "A sign with a Basenji nearby"
+  },
+  {
+    "src": "/IMG20240405105222.jpg",
+    "alt": "IMG20240405105222",
+    "type": ["Trails"],
+    "description": "A quiet trail"
+  },
+  {
+    "src": "/IMG20240405112917.jpg",
+    "alt": "IMG20240405112917",
+    "type": ["Views", "Signs"],
+    "description": "A mountain view with a sign"
+  },
+  {
+    "src": "/IMG20240405120003.jpg",
+    "alt": "IMG20240405120003",
+    "type": ["Basenji"],
+    "description": "A Basenji resting"
+  },
+  {
+    "src": "/IMG20240405122930.jpg",
+    "alt": "IMG20240405122930",
+    "type": ["Trails", "Views"],
+    "description": "A sunny trail"
+  },
+  {
+    "src": "/IMG20240413093710.jpg",
+    "alt": "IMG20240413093710",
+    "type": ["Signs"],
+    "description": "A park sign"
+  },
+  {
+    "src": "/IMG20240413101245.jpg",
+    "alt": "IMG20240413101245",
+    "type": ["Basenji", "Trails"],
+    "description": "A Basenji walking along a trail"
+  },
+  {
+    "src": "/IMG20240413105700.jpg",
+    "alt": "IMG20240413105700",
+    "type": ["Views"],
+    "description": "A final scenic view"
+  }
+]
