@@ -1,5 +1,5 @@
 <template>
-  <div class="header-display"><h1>Michael Gets Outdoors</h1></div>
+  <div class="header-display"><h1>Michael Goes Outdoors</h1></div>
   <div class="header-align">
     <div class="type-select-container" role="radiogroup" aria-labelledby="view-type-group">
       <div class="header-display" id="view-type-group">What do you want to see?</div>
