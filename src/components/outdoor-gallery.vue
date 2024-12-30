@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import Masonry from './children/masonry-gallery.vue'
+import Carousel from './children/carousel-gallery.vue'
 
 interface Image {
   src: string
