@@ -1,7 +1,7 @@
 <template>
   <div class="header-display"><h1>Michael Gets Outdoors</h1></div>
   <div class="header-align">
-    <div role="radiogroup" aria-labelledby="view-type-group">
+    <div class="type-select-container" role="radiogroup" aria-labelledby="view-type-group">
       <div class="header-display" id="view-type-group">What do you want to see?</div>
       <input type="radio" id="all" value="All" v-model="selectedType" />
       <label for="all">All</label>
@@ -92,16 +92,27 @@ onMounted(() => {
   color: cornflowerblue;
   font-weight: 600;
   font-size: 20px;
+  border-bottom: 3px inset cornflowerblue;
+  margin-bottom: 10px;
+}
+
+.header-display:has(h1) {
+  border-bottom: none !important;
 }
 
 .header-align {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  margin: 20px 0 30px;
+  margin: 20px 20px 30px 20px;
 }
 
 ::deep(.masonry-item) {
   cursor: pointer !important;
+}
+
+.header-display ~ input,
+.header-display ~ label {
+  padding: 10px 8px;
 }
 </style>
