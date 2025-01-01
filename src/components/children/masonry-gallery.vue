@@ -6,7 +6,7 @@
       class="masonry-item"
       @click="expandImage(image)"
     >
-      <img :src="image.src" :alt="image.alt" />
+      <img :src="image.src" :alt="image.alt" :loading="lazy" />
     </div>
 
     <div v-if="selectedImageIndex !== null" class="expanded-overlay" @click="closeImage">
@@ -24,6 +24,7 @@
           :alt="displayedImages[selectedImageIndex].alt"
           class="expanded-image"
           :class="displayedImages[selectedImageIndex].orientation"
+          :loading="lazy"
         />
         <div class="expanded-text">{{ displayedImages[selectedImageIndex].description }}</div>
       </div>

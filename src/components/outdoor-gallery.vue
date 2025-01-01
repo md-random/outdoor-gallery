@@ -1,29 +1,35 @@
 <template>
-  <div class="header-display"><h1>Michael Goes Outdoors</h1></div>
-  <div class="header-align">
-    <div class="type-select-container" role="radiogroup" aria-labelledby="view-type-group">
-      <div class="header-display" id="view-type-group">What do you want to see?</div>
-      <input type="radio" id="all" value="All" v-model="selectedType" />
-      <label for="all">All</label>
-      <input type="radio" id="views" value="Views" v-model="selectedType" />
-      <label for="views">Views</label>
-      <input type="radio" id="trails" value="Trails" v-model="selectedType" />
-      <label for="trails">Trails</label>
-      <input type="radio" id="signs" value="Signs" v-model="selectedType" />
-      <label for="signs">Signs</label>
-      <input type="radio" id="basenji" value="Basenji" v-model="selectedType" />
-      <label for="basenji">Basenjis</label>
-    </div>
+  <div class="header">
+    <div class="header-display">
+      <h1>Michael Goes Outdoors</h1>
+      <div class="header-align">
+        <div class="type-select-container" role="radiogroup" aria-labelledby="view-type-group">
+          <div class="header-display" id="view-type-group">What do you want to see?</div>
+          <input type="radio" id="all" value="All" v-model="selectedType" />
+          <label for="all">All</label>
+          <input type="radio" id="views" value="Views" v-model="selectedType" />
+          <label for="views">Views</label>
+          <input type="radio" id="trails" value="Trails" v-model="selectedType" />
+          <label for="trails">Trails</label>
+          <input type="radio" id="signs" value="Signs" v-model="selectedType" />
+          <label for="signs">Signs</label>
+          <input type="radio" id="basenji" value="Basenji" v-model="selectedType" />
+          <label for="basenji">Basenjis</label>
+        </div>
 
-    <div role="radiogroup" aria-labelledby="view-mode-group">
-      <div class="header-display" id="view-mode-group">How do you want to view it?</div>
-      <input type="radio" id="masonry" value="Masonry" v-model="selectedView" />
-      <label for="masonry">Masonry</label>
-      <input type="radio" id="carousel" value="Carousel" v-model="selectedView" />
-      <label for="carousel">Carousel</label>
+        <div role="radiogroup" aria-labelledby="view-mode-group">
+          <div class="header-display" id="view-mode-group">How do you want to view it?</div>
+          <input type="radio" id="masonry" value="Masonry" v-model="selectedView" />
+          <label for="masonry">Masonry</label>
+          <input type="radio" id="carousel" value="Carousel" v-model="selectedView" />
+          <label for="carousel">Carousel</label>
+        </div>
+      </div>
     </div>
   </div>
-  <component :is="currentComponent" :images="filteredImages" :selectedType="selectedType" />
+  <div class="child-container">
+    <component :is="currentComponent" :images="filteredImages" :selectedType="selectedType" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -88,6 +94,18 @@ onMounted(() => {
   font-style: normal;
 }
 
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  padding: 10px 30px;
+}
+
 .header-display {
   color: cornflowerblue;
   font-weight: 600;
@@ -114,5 +132,9 @@ onMounted(() => {
 .header-display ~ input,
 .header-display ~ label {
   padding: 10px 8px;
+}
+
+.child-container {
+  margin-top: 200px;
 }
 </style>

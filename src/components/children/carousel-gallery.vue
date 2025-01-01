@@ -30,7 +30,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-// Define props with default fallback values
 interface Image {
   src: string
   alt: string
@@ -43,14 +42,11 @@ const props = defineProps<{
   images?: Image[]
 }>()
 
-// Provide a default value if props.images is undefined or null
 const images = computed(() => props.images || [])
 
-// Control the number of thumbnails to show
 const thumbnailsToShow = 9
 const currentIndex = ref(0)
 
-// Dynamically calculate visible thumbnails
 const visibleThumbnails = computed(() => {
   const totalImages = images.value.length
   if (totalImages === 0) return []
@@ -64,30 +60,20 @@ const visibleThumbnails = computed(() => {
   return thumbnails
 })
 
-// Calculate the middle index for the "active" class
 const middleThumbnailIndex = Math.floor(thumbnailsToShow / 2)
 
-// Calculate scroll offset
-const scrollOffset = computed(() => {
-  return middleThumbnailIndex * 90 // Each thumbnail is 90px wide (80px + 10px margin)
-})
-
-// Current image in the carousel
 const currentImage = computed(() => images.value[currentIndex.value] || {})
 
-// Move to next image
 const nextSlide = () => {
   if (images.value.length === 0) return
   currentIndex.value = (currentIndex.value + 1) % images.value.length
 }
 
-// Move to previous image
 const prevSlide = () => {
   if (images.value.length === 0) return
   currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length
 }
 
-// Jump to a specific slide
 const jumpToSlide = (index: number) => {
   const totalImages = images.value.length
   if (totalImages === 0) return
@@ -178,7 +164,6 @@ const jumpToSlide = (index: number) => {
   border-radius: 5px;
 }
 
-/* Animation for active thumbnail */
 @keyframes pulse {
   0% {
     transform: scale(1);
