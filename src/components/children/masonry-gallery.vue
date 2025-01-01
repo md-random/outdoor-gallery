@@ -6,7 +6,7 @@
       class="masonry-item"
       @click="expandImage(image)"
     >
-      <img :src="image.src" :alt="image.alt" :loading="lazy" />
+      <img :src="image.src" :alt="image.alt" loading="lazy" />
     </div>
 
     <div v-if="selectedImageIndex !== null" class="expanded-overlay" @click="closeImage">
@@ -20,11 +20,12 @@
         }"
       >
         <img
+          v-if="selectedImageIndex !== null"
           :src="displayedImages[selectedImageIndex].src"
           :alt="displayedImages[selectedImageIndex].alt"
           class="expanded-image"
           :class="displayedImages[selectedImageIndex].orientation"
-          :loading="lazy"
+          loading="lazy"
         />
         <div class="expanded-text">{{ displayedImages[selectedImageIndex].description }}</div>
       </div>
@@ -179,14 +180,12 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
-.masonry-item img {
+img {
   width: 100%;
   display: block;
   border-radius: 5px;
   object-fit: contain;
-}
 
-img {
   width: 100%;
   height: 100%;
 }

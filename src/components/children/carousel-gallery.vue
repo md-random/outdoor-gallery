@@ -12,7 +12,7 @@
 
     <!-- Thumbnail Block -->
     <div class="thumbnail-container" v-if="images.length > 0">
-      <div class="thumbnail-wrapper" :style="{ transform: `translateX(-${1}px)` }">
+      <div class="thumbnail-wrapper">
         <div
           v-for="(image, index) in visibleThumbnails"
           :key="index"

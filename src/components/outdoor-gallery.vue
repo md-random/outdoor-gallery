@@ -3,26 +3,30 @@
     <div class="header-display">
       <h1>Michael Goes Outdoors</h1>
       <div class="header-align">
-        <div class="type-select-container" role="radiogroup" aria-labelledby="view-type-group">
-          <div class="header-display" id="view-type-group">What do you want to see?</div>
-          <input type="radio" id="all" value="All" v-model="selectedType" />
-          <label for="all">All</label>
-          <input type="radio" id="views" value="Views" v-model="selectedType" />
-          <label for="views">Views</label>
-          <input type="radio" id="trails" value="Trails" v-model="selectedType" />
-          <label for="trails">Trails</label>
-          <input type="radio" id="signs" value="Signs" v-model="selectedType" />
-          <label for="signs">Signs</label>
-          <input type="radio" id="basenji" value="Basenji" v-model="selectedType" />
-          <label for="basenji">Basenjis</label>
+        <div>
+          <div class="header-display">What do you want to see?</div>
+          <button
+            v-for="type in types"
+            :key="type"
+            @click="selectType(type)"
+            class="button-align"
+            :class="{ active: selectedType === type }"
+          >
+            {{ type }}
+          </button>
         </div>
 
-        <div role="radiogroup" aria-labelledby="view-mode-group">
-          <div class="header-display" id="view-mode-group">How do you want to view it?</div>
-          <input type="radio" id="masonry" value="Masonry" v-model="selectedView" />
-          <label for="masonry">Masonry</label>
-          <input type="radio" id="carousel" value="Carousel" v-model="selectedView" />
-          <label for="carousel">Carousel</label>
+        <div>
+          <div class="header-display">How do you want to view it?</div>
+          <button
+            v-for="view in views"
+            :key="view"
+            @click="selectView(view)"
+            class="button-align"
+            :class="{ active: selectedView === view }"
+          >
+            {{ view }}
+          </button>
         </div>
       </div>
     </div>
@@ -46,6 +50,8 @@ interface Image {
 }
 
 const images = ref<Image[]>([])
+const types = ['All', 'Views', 'Trails', 'Signs', 'Basenji']
+const views = ['Masonry', 'Carousel']
 const selectedType = ref<string>('All')
 const selectedView = ref<string>('Masonry')
 
@@ -68,16 +74,20 @@ const setImageOrientation = () => {
 
 const filteredImages = computed(() => {
   if (!selectedType.value || selectedType.value === 'All') {
-    console.log('Parent Filtered Images:', filteredImages.value)
-
     return images.value
   }
-  console.log('Parent Filtered Images:', filteredImages.value)
-
   return images.value.filter((image) => image.type.includes(selectedType.value))
 })
 
 const currentComponent = computed(() => (selectedView.value === 'Masonry' ? Masonry : Carousel))
+
+const selectType = (type: string) => {
+  selectedType.value = type
+}
+
+const selectView = (view: string) => {
+  selectedView.value = view
+}
 
 onMounted(() => {
   fetchImages()
@@ -110,31 +120,43 @@ onMounted(() => {
   color: cornflowerblue;
   font-weight: 600;
   font-size: 20px;
-  border-bottom: 3px inset cornflowerblue;
   margin-bottom: 10px;
 }
 
-.header-display:has(h1) {
-  border-bottom: none !important;
+.header-display:not(:has(h1)) {
+  border-bottom: 3px inset cornflowerblue;
 }
 
 .header-align {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  margin: 20px 20px 30px 20px;
 }
 
-::deep(.masonry-item) {
-  cursor: pointer !important;
+button {
+  background: none;
+  color: cornflowerblue;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.0314s ease-in-out;
 }
 
-.header-display ~ input,
-.header-display ~ label {
-  padding: 10px 8px;
+button:hover,
+button.active {
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 13px;
+}
+
+.button-align {
+  padding: 3px 12px;
+  margin: 0 10px;
 }
 
 .child-container {
-  margin-top: 200px;
+  margin-top: 220px;
 }
 </style>
