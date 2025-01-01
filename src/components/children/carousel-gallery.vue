@@ -3,7 +3,19 @@
     <!-- Main Carousel Image -->
     <div class="carousel-image" v-if="images.length > 0">
       <button class="prev-button" @click="prevSlide">&lt;</button>
-      <img :src="currentImage.src" :alt="currentImage.alt" class="active" />
+      <div
+        class="carousel-image-wrapper"
+        :class="
+          currentImage.orientation === 'vertical' ? 'vertical-container' : 'horizontal-container'
+        "
+      >
+        <img
+          :src="currentImage.src"
+          :alt="currentImage.alt"
+          class="active"
+          :class="currentImage.orientation"
+        />
+      </div>
       <button class="next-button" @click="nextSlide">&gt;</button>
     </div>
     <div class="carousel-image" v-else>
@@ -17,10 +29,14 @@
           v-for="(image, index) in visibleThumbnails"
           :key="index"
           class="thumbnail"
-          :class="{ active: index === middleThumbnailIndex }"
+          :class="{
+            active: index === middleThumbnailIndex,
+            vertical: image.orientation === 'vertical',
+            horizontal: image.orientation === 'horizontal',
+          }"
           @click="jumpToSlide(index)"
         >
-          <img :src="image.src" :alt="image.alt" />
+          <img :src="image.src" :alt="image.alt" :class="image.orientation" />
         </div>
       </div>
     </div>
@@ -28,25 +44,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 interface Image {
   src: string
   alt: string
   type: string[]
   description: string
-  orientation: string
+  orientation: 'vertical' | 'horizontal'
 }
 
-const props = defineProps<{
-  images?: Image[]
-}>()
-
-const images = computed(() => props.images || [])
-
-const thumbnailsToShow = 9
+const props = defineProps<{ images?: Image[] }>()
+const images = ref<Image[]>([])
 const currentIndex = ref(0)
+const thumbnailsToShow = 9
 
+const currentImage = computed(() => images.value[currentIndex.value] || {})
 const visibleThumbnails = computed(() => {
   const totalImages = images.value.length
   if (totalImages === 0) return []
@@ -62,7 +75,15 @@ const visibleThumbnails = computed(() => {
 
 const middleThumbnailIndex = Math.floor(thumbnailsToShow / 2)
 
-const currentImage = computed(() => images.value[currentIndex.value] || {})
+const setImageOrientation = () => {
+  images.value.forEach((image) => {
+    const img = new Image()
+    img.src = image.src
+    img.onload = () => {
+      image.orientation = img.height > img.width ? 'vertical' : 'horizontal'
+    }
+  })
+}
 
 const nextSlide = () => {
   if (images.value.length === 0) return
@@ -80,6 +101,13 @@ const jumpToSlide = (index: number) => {
   currentIndex.value =
     (index + currentIndex.value - middleThumbnailIndex + totalImages) % totalImages
 }
+
+onMounted(() => {
+  if (props.images) {
+    images.value = props.images
+    setImageOrientation()
+  }
+})
 </script>
 
 <style scoped>
@@ -89,15 +117,74 @@ const jumpToSlide = (index: number) => {
 
 .carousel-image {
   position: relative;
-  width: 80%;
-  margin: 0 auto;
+  /*margin: 0 auto 50px;*/
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
-.carousel-image img {
+.carousel-image-wrapper.vertical-container {
+  height: 55vh;
+}
+
+.carousel-image-wrapper.horizontal-container {
+  width: 50%;
+  height: 50vh;
+}
+
+img.vertical {
+  width: auto;
+  height: 100%;
+}
+
+img.horizontal {
   width: 100%;
+  height: 100%;
+}
+
+.thumbnail-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  overflow: hidden;
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.thumbnail-wrapper {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  padding: 40px;
+}
+
+.thumbnail {
+  width: auto;
+  height: 79px;
+  margin: 0 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 13px;
+}
+
+.thumbnail.vertical.active {
+  border: 4px ridge cornflowerblue;
+  transform: scale(1.5);
+  margin: 0 20px;
+}
+
+.thumbnail.horizontal.active {
+  border: 4px ridge cornflowerblue;
+  transform: scale(1.2);
+  margin: 0 20px;
+}
+
+img {
+  object-fit: cover;
   border-radius: 10px;
 }
 
@@ -122,57 +209,5 @@ const jumpToSlide = (index: number) => {
 
 .next-button {
   right: -20px;
-}
-
-.thumbnail-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  overflow: hidden;
-  position: relative;
-  width: 90%;
-  margin: 0 auto;
-}
-
-.thumbnail-wrapper {
-  display: flex;
-  transition: transform 0.3s ease-in-out;
-}
-
-.thumbnail {
-  width: 80px;
-  height: 80px;
-  margin: 0 5px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-}
-
-.thumbnail.active {
-  border: 2px solid cornflowerblue;
-  transform: scale(1.3);
-  animation: pulse 0.5s ease;
-}
-
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.3);
-  }
-  100% {
-    transform: scale(1.2);
-  }
 }
 </style>
