@@ -15,6 +15,19 @@
           :class="currentImage.orientation"
         />
       </div>
+      <div class="postcard">
+        <div class="postcard-topline">
+          <div>{{ currentImage.type }}</div>
+          <div class="nat-park-serv-icon"><img src="/np.jpeg" alt="" /></div>
+        </div>
+        <div>
+          <div><span class="postcard-greeting"> Greetings from:</span></div>
+          <div class="postcard-header">{{ currentImage.location }}!</div>
+        </div>
+        <div class="postcard-text">
+          {{ currentImage.description }}
+        </div>
+      </div>
       <button class="next-button" @click="nextSlide">&gt;</button>
     </div>
     <div class="carousel-image" v-else>
@@ -128,7 +141,7 @@ onMounted(() => {
   padding: 2px;
   background-color: #b7cb99;
   border-radius: 12px;
-  margin: 5px;
+  margin: 5px 0 0 125px;
 }
 
 .carousel-image-wrapper.horizontal-container {
@@ -138,7 +151,7 @@ onMounted(() => {
   padding: 2px;
   background-color: #b7cb99;
   border-radius: 12px;
-  margin: 5px;
+  margin: 5px 0 0 55px;
 }
 
 img.vertical {
@@ -222,5 +235,58 @@ img {
 
 .next-button {
   right: -20px;
+}
+
+.postcard {
+  width: 33%;
+  padding: 20px 10px;
+  margin: 20px auto;
+  border: 2px solid #d4c4aa; /* Light tan border */
+  border-radius: 10px;
+  background: linear-gradient(145deg, #fdfdfd, #f2ebd8); /* Soft background gradient */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  font-family: 'Courier New', Courier, monospace; /* Typewriter-style font */
+  color: #4a4a4a;
+  text-align: left;
+}
+
+.postcard-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #431d32;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for a raised look */
+  margin-bottom: 15px;
+}
+
+.postcard-greeting {
+  font-family: 'Pacifico', serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 30px;
+  letter-spacing: 8px;
+  padding-bottom: 2%;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+.postcard-text {
+  font-size: 1rem;
+  font-style: italic;
+  color: #4a4a4a;
+  text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
+}
+
+.nat-park-serv-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.nat-park-serv-icon img {
+  position: relative;
+  width: 75px;
+  height: 50px;
+  object-fit: contain;
 }
 </style>

@@ -95,7 +95,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Pacifico&display=swap');
 
 * {
   font-family: 'Mulish', serif;
@@ -125,7 +125,7 @@ onMounted(() => {
 
 .header-display:not(:has(h1)) {
   color: #778fd2;
-  border-bottom: 3px inset #778fd2;
+  border-bottom: 0.125em inset #778fd2;
 }
 
 .header-align {
