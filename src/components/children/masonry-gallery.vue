@@ -209,16 +209,6 @@ img {
   padding: 10px 10px 50px;
 }
 
-.expanded-container-horizontal {
-  max-width: 50vw;
-  max-height: 75vh;
-}
-
-.expanded-container-vertical {
-  max-width: 30vw;
-  max-height: 80vh;
-}
-
 .expanded-text {
   width: 100%;
   height: 40px;
@@ -239,7 +229,7 @@ img {
 
 @media screen and (min-width: 1250px) {
   .expanded-container-vertical {
-    max-width: 23vw;
+    max-width: 33vw;
     max-height: 80vh;
   }
 

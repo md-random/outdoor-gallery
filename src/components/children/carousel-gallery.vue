@@ -1,6 +1,5 @@
 <template>
   <div class="carousel-container">
-    <!-- Main Carousel Image -->
     <div class="carousel-image" v-if="images.length > 0">
       <button class="prev-button" @click="prevSlide">&lt;</button>
       <div
@@ -22,7 +21,6 @@
       <p>No images available</p>
     </div>
 
-    <!-- Thumbnail Block -->
     <div class="thumbnail-container" v-if="images.length > 0">
       <div class="thumbnail-wrapper">
         <div
@@ -117,7 +115,6 @@ onMounted(() => {
 
 .carousel-image {
   position: relative;
-  /*margin: 0 auto 50px;*/
   display: flex;
   justify-content: center;
   align-items: center;
@@ -127,11 +124,21 @@ onMounted(() => {
 
 .carousel-image-wrapper.vertical-container {
   height: 55vh;
+  outline: 4px ridge #778fd2;
+  padding: 2px;
+  background-color: #b7cb99;
+  border-radius: 12px;
+  margin: 5px;
 }
 
 .carousel-image-wrapper.horizontal-container {
   width: 50%;
   height: 50vh;
+  outline: 4px ridge #778fd2;
+  padding: 2px;
+  background-color: #b7cb99;
+  border-radius: 12px;
+  margin: 5px;
 }
 
 img.vertical {
@@ -172,13 +179,17 @@ img.horizontal {
 }
 
 .thumbnail.vertical.active {
-  border: 4px ridge cornflowerblue;
+  border: 3px ridge #778fd2;
+  padding: 1px;
+  background-color: #b7cb99;
   transform: scale(1.5);
   margin: 0 20px;
 }
 
 .thumbnail.horizontal.active {
-  border: 4px ridge cornflowerblue;
+  border: 3px ridge #778fd2;
+  padding: 1px;
+  background-color: #b7cb99;
   transform: scale(1.2);
   margin: 0 20px;
 }
@@ -193,11 +204,13 @@ img {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  background-color: #2a3759;
+  border-radius: 12px;
+  color: #b7cb99;
   border: none;
   font-size: 24px;
-  width: 40px;
+  font-weight: 900;
+  width: 50px;
   height: 40px;
   cursor: pointer;
   z-index: 2;

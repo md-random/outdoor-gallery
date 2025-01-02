@@ -112,19 +112,20 @@ onMounted(() => {
   background-color: white;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 200px;
+  height: 155px;
   padding: 10px 30px;
 }
 
 .header-display {
-  color: cornflowerblue;
+  color: #2a3759;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 10px;
 }
 
 .header-display:not(:has(h1)) {
-  border-bottom: 3px inset cornflowerblue;
+  color: #778fd2;
+  border-bottom: 3px inset #778fd2;
 }
 
 .header-align {
@@ -135,9 +136,9 @@ onMounted(() => {
 
 button {
   background: none;
-  color: cornflowerblue;
+  color: #778fd2;
   border: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 
   cursor: pointer;
@@ -146,8 +147,9 @@ button {
 
 button:hover,
 button.active {
-  background-color: cornflowerblue;
+  background-color: #778fd2;
   color: white;
+  outline: 1px solid #b7cb99;
   border-radius: 13px;
 }
 
@@ -157,6 +159,6 @@ button.active {
 }
 
 .child-container {
-  margin-top: 220px;
+  margin-top: 200px;
 }
 </style>

@@ -158,6 +158,12 @@ const goToPreviousImage = () => {
 - **Masonry Grid**: Dynamic arrangement based on image dimensions.
 - **Carousel Viewer**: Smooth transitions and synchronized thumbnail navigation.
 - **Responsive Design**: Works seamlessly on different screen sizes.
+- **Color Palette**:
+  #3D5220 Bronzetone
+  #B7CB99 Laurel Green
+  #778FD2 Wild Blue Yonder
+  #2A3759 Delft Blue
+  #431D32 Blue-Magenta
 
 ---
 
