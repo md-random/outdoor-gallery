@@ -17,8 +17,13 @@
       </div>
       <div class="postcard">
         <div class="postcard-topline">
-          <div>{{ currentImage.type }}</div>
-          <div class="nat-park-serv-icon"><img src="/np.jpeg" alt="" /></div>
+          <div>
+            <div v-for="(type, index) in currentImage.type" :key="index" class="current-type">
+              {{ type }}
+            </div>
+          </div>
+
+          <div class="nat-park-serv-icon"><img src="/np.png" alt="" /></div>
         </div>
         <div>
           <div><span class="postcard-greeting"> Greetings from:</span></div>
@@ -55,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 
 interface Image {
   src: string
@@ -65,7 +70,11 @@ interface Image {
   orientation: 'vertical' | 'horizontal'
 }
 
-const props = defineProps<{ images?: Image[] }>()
+const props = defineProps<{
+  images?: Image[]
+  selectedType: string
+}>()
+
 const images = ref<Image[]>([])
 const currentIndex = ref(0)
 const thumbnailsToShow = 9
@@ -85,6 +94,18 @@ const visibleThumbnails = computed(() => {
 })
 
 const middleThumbnailIndex = Math.floor(thumbnailsToShow / 2)
+
+const filteredImages = computed(() => {
+  if (!props.selectedType || props.selectedType === 'All') {
+    return props.images || []
+  }
+  return (props.images || []).filter((image) => image.type.includes(props.selectedType))
+})
+
+watch(filteredImages, (newFilteredImages) => {
+  images.value = newFilteredImages
+  currentIndex.value = 0
+})
 
 const setImageOrientation = () => {
   images.value.forEach((image) => {
@@ -114,10 +135,8 @@ const jumpToSlide = (index: number) => {
 }
 
 onMounted(() => {
-  if (props.images) {
-    images.value = props.images
-    setImageOrientation()
-  }
+  images.value = filteredImages.value
+  setImageOrientation()
 })
 </script>
 
@@ -239,7 +258,7 @@ img {
 
 .postcard {
   width: 33%;
-  padding: 20px 10px;
+  padding: 10px 10px 20px;
   margin: 20px auto;
   border: 2px solid #d4c4aa; /* Light tan border */
   border-radius: 10px;
@@ -257,18 +276,24 @@ img {
   color: #431d32;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for a raised look */
   margin-bottom: 15px;
+  padding-bottom: 20px;
+  top: -20px;
+  position: relative;
 }
 
 .postcard-greeting {
   font-family: 'Pacifico', serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 30px;
+  font-size: 36px;
   letter-spacing: 8px;
-  padding-bottom: 2%;
   display: inline-block;
   width: 100%;
-  text-align: center;
+  text-align: start;
+  top: -25px;
+  margin-bottom: 12px;
+  position: relative;
+  color: #b7cb99;
 }
 
 .postcard-text {
@@ -278,15 +303,30 @@ img {
   text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
 }
 
+.postcard-topline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 2000;
+}
+
 .nat-park-serv-icon {
   width: 100%;
   height: 100%;
+  text-align: end;
 }
 
 .nat-park-serv-icon img {
   position: relative;
   width: 75px;
-  height: 50px;
+  height: 60px;
   object-fit: contain;
+}
+
+.current-type {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 </style>
