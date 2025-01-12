@@ -29,7 +29,6 @@ const props = defineProps<{
   selectedType: string
 }>()
 
-const x = ref()
 const galleryContainer = ref<HTMLDivElement | null>(null)
 let scrollAnimationFrame: number | null = null
 
