@@ -40,6 +40,7 @@
 import { ref, computed, onMounted } from 'vue'
 import Masonry from './children/masonry-gallery.vue'
 import Carousel from './children/carousel-gallery.vue'
+import Scrolling from './children/scrolling-gallery.vue'
 
 interface Image {
   src: string
@@ -51,9 +52,10 @@ interface Image {
 
 const images = ref<Image[]>([])
 const types = ['All', 'Views', 'Trails', 'Signs', 'Basenji']
-const views = ['Masonry', 'Carousel']
+const views = ['Masonry', 'Carousel', 'Scrolling'] as const
+
 const selectedType = ref<string>('All')
-const selectedView = ref<string>('Masonry')
+const selectedView = ref<'Masonry' | 'Carousel' | 'Scrolling'>('Masonry')
 
 const fetchImages = async () => {
   const response = await fetch('/images.json')
@@ -79,13 +81,19 @@ const filteredImages = computed(() => {
   return images.value.filter((image) => image.type.includes(selectedType.value))
 })
 
-const currentComponent = computed(() => (selectedView.value === 'Masonry' ? Masonry : Carousel))
+const componentsMap = {
+  Masonry,
+  Carousel,
+  Scrolling,
+}
+
+const currentComponent = computed(() => componentsMap[selectedView.value])
 
 const selectType = (type: string) => {
   selectedType.value = type
 }
 
-const selectView = (view: string) => {
+const selectView = (view: typeof selectedView.value) => {
   selectedView.value = view
 }
 
