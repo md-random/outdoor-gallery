@@ -1,8 +1,11 @@
 <template>
   <div class="header">
     <div class="header-display">
-      <h1>Michael Goes Outdoors</h1>
       <div class="header-align">
+        <h1>Michael Goes Outdoors</h1>
+        <div @click="imageManage()" class="system-style">&#9881;</div>
+      </div>
+      <div class="header-align" v-if="!viewImageManagement">
         <div>
           <div class="header-display">What do you want to see?</div>
           <button
@@ -31,9 +34,11 @@
       </div>
     </div>
   </div>
-  <div class="child-container">
+  <div class="child-container" v-if="!viewImageManagement">
     <component :is="currentComponent" :images="filteredImages" :selectedType="selectedType" />
   </div>
+
+  <div v-else><Manage /></div>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +46,7 @@ import { ref, computed, onMounted } from 'vue'
 import Masonry from './children/masonry-gallery.vue'
 import Carousel from './children/carousel-gallery.vue'
 import Scrolling from './children/scrolling-gallery.vue'
+import Manage from './children/image-management.vue'
 
 interface Image {
   src: string
@@ -56,6 +62,7 @@ const views = ['Masonry', 'Carousel', 'Scrolling'] as const
 
 const selectedType = ref<string>('All')
 const selectedView = ref<'Masonry' | 'Carousel' | 'Scrolling'>('Masonry')
+const viewImageManagement = ref<boolean>(false)
 
 const fetchImages = async () => {
   const response = await fetch('/images.json')
@@ -95,6 +102,10 @@ const selectType = (type: string) => {
 
 const selectView = (view: typeof selectedView.value) => {
   selectedView.value = view
+}
+
+const imageManage = () => {
+  viewImageManagement.value = !viewImageManagement.value
 }
 
 onMounted(() => {
@@ -168,5 +179,12 @@ button.active {
 
 .child-container {
   margin-top: 200px;
+}
+
+.system-style {
+  font-size: 30px;
+  cursor: pointer;
+  padding: 5px;
+  color: #778fd2;
 }
 </style>
