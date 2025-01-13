@@ -227,7 +227,7 @@ onMounted(async () => {
 }
 
 .metadata-card {
-  text-align: center;
+  text-align: start;
 }
 
 .metadata-card input,
@@ -249,7 +249,7 @@ onMounted(async () => {
   align-items: center;
   max-width: 100%;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .type-checkbox {
