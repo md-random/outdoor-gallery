@@ -32,6 +32,8 @@ app.get('/api/metadata', (req, res) => {
 app.post('/api/metadata', (req, res) => {
   const updatedMetadata = req.body
 
+  console.log('Received payload:', req.body)
+
   fs.writeFile(IMAGES_JSON_PATH, JSON.stringify(updatedMetadata, null, 2), 'utf8', (err) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to update metadata' })

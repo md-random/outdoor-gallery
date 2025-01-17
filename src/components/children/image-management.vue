@@ -10,52 +10,42 @@
         Unmatched
       </button>
     </div>
-    <div v-if="isLoading">Loading...</div>
-    <div v-else class="image-grid">
-      <div v-for="(meta, index) in filteredMetadata" :key="meta.src" class="image-item">
-        <div class="image-container">
-          <img
-            :src="'http://localhost:3000' + meta.src"
-            :alt="meta.alt"
-            @click="enlargeImage(meta)"
-            class="clickable-image"
-          />
-        </div>
-        <div class="metadata-card">
-          Alt:
-          <input
-            :value="meta.alt"
-            @input="(e) => updateField(index, 'alt', (e.target as HTMLInputElement).value)"
-            placeholder="Alt text"
-          />
-          Description:
-          <textarea
-            :value="meta.description"
-            @input="
-              (e) => updateField(index, 'description', (e.target as HTMLTextAreaElement).value)
-            "
-            placeholder="Description"
-          ></textarea>
-          Location:
-          <input
-            :value="meta.location"
-            @input="(e) => updateField(index, 'location', (e.target as HTMLInputElement).value)"
-            placeholder="Location"
-          />
-          <div class="type-container">
-            Type:
-            <label v-for="type in allowedTypes" :key="type" class="type-checkbox">
-              <input
-                type="checkbox"
-                :checked="meta.type.includes(type)"
-                @change="toggleType(index, type)"
-              />
-              {{ type }}
-            </label>
+    <div v-if="editMessage" class="edit-message">{{ editMessage }}</div>
+    <div v-else-if="isLoading">Loading...</div>
+    <transition name="fade">
+      <div v-if="!editMessage && !isLoading" class="image-grid">
+        <div v-for="(meta, index) in filteredMetadata" :key="meta.src" class="image-item">
+          <div class="image-container">
+            <img
+              :src="'http://localhost:3000' + meta.src"
+              :alt="meta.alt"
+              @click="enlargeImage(meta)"
+              class="clickable-image"
+            />
+          </div>
+          <div class="metadata-card">
+            <span> Alt:</span>
+            <input v-model="meta.alt" placeholder="Alt text" />
+            <span> Description:</span>
+            <textarea v-model="meta.description" placeholder="Description"></textarea>
+            <span> Location:</span>
+            <input v-model="meta.location" placeholder="Location" />
+            <div class="type-container">
+              <span> Type:</span>
+              <label v-for="type in allowedTypes" :key="type" class="type-checkbox">
+                <input
+                  type="checkbox"
+                  :checked="meta.type.includes(type)"
+                  @change="toggleType(index, type)"
+                />
+                {{ type }}
+              </label>
+            </div>
+            <div class="save-icon" @click="saveMetadata(index)">💾</div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
     <div v-if="enlargedImage" class="enlarged-image-overlay" @click="closeEnlargedImage">
       <div :class="['enlarged-image-container', isImageVertical ? 'vertical' : 'horizontal']">
         <img
@@ -86,6 +76,8 @@ const isLoading = ref(true)
 const filterType = ref<'all' | 'matched' | 'unmatched'>('all')
 const enlargedImage = ref<ImageMetadata | null>(null)
 const isImageVertical = ref<boolean>(false)
+let tempMetadata: ImageMetadata[] = []
+const editMessage = ref<string>('')
 
 const allowedTypes = ['Trails', 'Views', 'Signs', 'Basenji']
 
@@ -107,53 +99,57 @@ const fetchMetadata = async () => {
   }
 }
 
-const updateMetadata = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/api/metadata', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(metadata.value),
-    })
-    if (!response.ok) {
-      throw new Error('Failed to update metadata')
-    }
-    console.log('Metadata updated successfully')
-  } catch (error) {
-    console.error('Error updating metadata:', error)
+const saveMetadata = async (index: number) => {
+  const filteredItem = filteredMetadata.value[index]
+  const originalIndex = metadata.value.findIndex((meta) => meta.src === filteredItem.src)
+
+  if (originalIndex === -1) {
+    console.error('Original index not found.')
+    return
   }
+
+  metadata.value[originalIndex] = { ...tempMetadata[originalIndex] }
+
+  const response = await fetch('http://localhost:3000/api/metadata', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(metadata.value),
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to save metadata')
+  }
+
+  console.log('Saved metadata:', metadata.value[originalIndex])
+  editMessage.value = `Edit Successful for: ${filteredMetadata.value[index].src}`
+  setTimeout(() => {
+    editMessage.value = ''
+    resetData()
+  }, 3000)
 }
 
 const filteredMetadata = computed(() => {
   switch (filterType.value) {
     case 'matched':
-      return metadata.value.filter(
+      return tempMetadata.filter(
         (meta) => meta.src && meta.alt && meta.type.length > 0 && meta.description && meta.location,
       )
     case 'unmatched':
-      return metadata.value.filter(
+      return tempMetadata.filter(
         (meta) =>
           !meta.src || !meta.alt || meta.type.length === 0 || !meta.description || !meta.location,
       )
     default:
-      return metadata.value
+      return tempMetadata
   }
 })
 
-const updateField = async (index: number, field: keyof ImageMetadata, value: string | string[]) => {
-  metadata.value[index][field] = value as never
-  await updateMetadata()
-}
-
-const toggleType = async (index: number, type: string) => {
-  const metaTypes = metadata.value[index].type
-  if (metaTypes.includes(type)) {
-    metadata.value[index].type = metaTypes.filter((t) => t !== type)
-  } else {
-    metadata.value[index].type.push(type)
-  }
-  await updateMetadata()
+const toggleType = (index: number, type: string) => {
+  const originalIndex = tempMetadata.findIndex(
+    (meta) => meta.src === filteredMetadata.value[index].src,
+  )
+  const meta = tempMetadata[originalIndex]
+  meta.type = meta.type.includes(type) ? meta.type.filter((t) => t !== type) : [...meta.type, type]
 }
 
 const enlargeImage = (image: ImageMetadata) => {
@@ -170,10 +166,15 @@ const onEnlargedImageLoad = (event: Event) => {
   isImageVertical.value = img.naturalHeight > img.naturalWidth
 }
 
-onMounted(async () => {
+const resetData = async () => {
   await fetchImages()
   await fetchMetadata()
+  tempMetadata = JSON.parse(JSON.stringify(metadata.value))
   isLoading.value = false
+}
+
+onMounted(async () => {
+  resetData()
 })
 </script>
 
@@ -202,8 +203,8 @@ onMounted(async () => {
   gap: 20px;
 }
 .image-item {
+  position: relative;
   border-radius: 15px;
-
   color: #2a3759;
   border: 3px ridge #2a3759;
   box-shadow:
@@ -225,11 +226,9 @@ onMounted(async () => {
 .clickable-image:hover {
   transform: scale(1.05);
 }
-
 .metadata-card {
   text-align: start;
 }
-
 .metadata-card input,
 .metadata-card textarea {
   width: 90%;
@@ -241,7 +240,6 @@ onMounted(async () => {
     inset -4px -4px rgba(255, 255, 255, 0.5),
     inset -2px -2px rgba(0, 0, 0, 0.1);
 }
-
 .type-container {
   display: flex;
   flex-wrap: nowrap;
@@ -250,11 +248,29 @@ onMounted(async () => {
   max-width: 100%;
   overflow: hidden;
   font-size: 10px;
+  margin: 10px 0 25px 0;
 }
 
 .type-checkbox {
   display: flex;
   align-items: center;
+}
+
+.type-checkbox input[type='checkbox'] {
+  width: 12px;
+  height: 20px;
+}
+
+.save-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+span:has(textarea) {
+  padding: 10px;
 }
 
 .enlarged-image-overlay {
@@ -286,5 +302,14 @@ onMounted(async () => {
 .enlarged-image {
   max-width: 100%;
   max-height: auto;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
