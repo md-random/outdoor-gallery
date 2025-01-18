@@ -108,8 +108,13 @@ const imageManage = () => {
   viewImageManagement.value = !viewImageManagement.value
 }
 
-onMounted(() => {
-  fetchImages()
+const syncMetadata = async () => {
+  await fetch('/api/metadata')
+}
+
+onMounted(async () => {
+  await syncMetadata()
+  await fetchImages()
 })
 </script>
 
