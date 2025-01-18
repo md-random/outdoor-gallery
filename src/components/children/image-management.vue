@@ -2,12 +2,14 @@
   <div class="manage-align">
     <h1>Image Metadata Manager</h1>
     <div class="filter-buttons">
-      <button @click="filterType = 'all'" :class="{ active: filterType === 'all' }">All</button>
+      <button @click="filterType = 'all'" :class="{ active: filterType === 'all' }">
+        All <span class="count-bubble">{{ allNumber }}</span>
+      </button>
       <button @click="filterType = 'matched'" :class="{ active: filterType === 'matched' }">
-        Matched
+        Matched <span class="count-bubble">{{ matchedNumber }}</span>
       </button>
       <button @click="filterType = 'unmatched'" :class="{ active: filterType === 'unmatched' }">
-        Unmatched
+        Unmatched <span class="count-bubble">{{ unmatchedNumber }}</span>
       </button>
     </div>
     <div v-if="editMessage" class="edit-message">{{ editMessage }}</div>
@@ -79,7 +81,6 @@ interface ImageMetadata {
   location: string
 }
 
-const images = ref<string[]>([])
 const metadata = ref<ImageMetadata[]>([])
 const isLoading = ref(true)
 const filterType = ref<'all' | 'matched' | 'unmatched'>('all')
@@ -87,6 +88,9 @@ const enlargedImage = ref<ImageMetadata | null>(null)
 const isImageVertical = ref<boolean>(false)
 let tempMetadata: ImageMetadata[] = []
 const editMessage = ref<string>('')
+const allNumber = ref(0)
+const matchedNumber = ref(0)
+const unmatchedNumber = ref(0)
 
 const allowedTypes = ['Trails', 'Views', 'Signs', 'Basenji']
 
@@ -163,11 +167,51 @@ const onEnlargedImageLoad = (event: Event) => {
   isImageVertical.value = img.naturalHeight > img.naturalWidth
 }
 
+interface ImageMetadata {
+  src: string
+  alt: string
+  type: string[]
+  description: string
+  location: string
+}
+
+const setCounts = (tempMetadata: ImageMetadata[]) => {
+  tempMetadata.forEach((imageMetadata) => {
+    if (imageMetadata) {
+      allNumber.value++
+    }
+    if (
+      imageMetadata.src &&
+      imageMetadata.alt &&
+      imageMetadata.type.length > 0 &&
+      imageMetadata.description &&
+      imageMetadata.location
+    ) {
+      matchedNumber.value++
+    }
+    if (
+      !imageMetadata.src ||
+      !imageMetadata.alt ||
+      imageMetadata.type.length === 0 ||
+      !imageMetadata.description ||
+      !imageMetadata.location
+    ) {
+      unmatchedNumber.value++
+    }
+  })
+
+  console.log('all', allNumber.value)
+  console.log('matched', matchedNumber.value)
+  console.log('all', unmatchedNumber.value)
+}
+
 const resetData = async () => {
   isLoading.value = true
   try {
     await fetchMetadata()
     tempMetadata = JSON.parse(JSON.stringify(metadata.value))
+    setCounts(tempMetadata)
+    console.log('tempMetadata', tempMetadata)
   } catch (error) {
     console.error('Error resetting data:', error)
   } finally {
@@ -325,5 +369,16 @@ span:has(textarea) {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.count-bubble {
+  border: 2px solid #431d32;
+  background-color: #778fd2;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 5px;
+  margin-left: 10px;
+  font-size: 12px;
+  display: inline-block;
 }
 </style>
