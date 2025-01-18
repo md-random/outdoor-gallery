@@ -41,7 +41,16 @@
                 {{ type }}
               </label>
             </div>
-            <div class="save-icon" @click="saveMetadata(index)">💾</div>
+            <div>
+              <div class="delete-icon" title="Delete Image">&#9940;</div>
+              <div
+                class="save-icon"
+                title="Save Edits To Image Metadata"
+                @click="saveMetadata(index)"
+              >
+                💾
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -81,22 +90,10 @@ const editMessage = ref<string>('')
 
 const allowedTypes = ['Trails', 'Views', 'Signs', 'Basenji']
 
-const fetchImages = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/api/files')
-    images.value = await response.json()
-  } catch (error) {
-    console.error('Error fetching images:', error)
-  }
-}
-
 const fetchMetadata = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/api/metadata')
-    metadata.value = await response.json()
-  } catch (error) {
-    console.error('Error fetching metadata:', error)
-  }
+  const response = await fetch('http://localhost:3000/api/metadata')
+  if (!response.ok) throw new Error('Failed to fetch metadata')
+  metadata.value = await response.json()
 }
 
 const saveMetadata = async (index: number) => {
@@ -119,13 +116,13 @@ const saveMetadata = async (index: number) => {
   if (!response.ok) {
     throw new Error('Failed to save metadata')
   }
-
-  console.log('Saved metadata:', metadata.value[originalIndex])
   editMessage.value = `Edit Successful for: ${filteredMetadata.value[index].src}`
   setTimeout(() => {
     editMessage.value = ''
-    resetData()
   }, 3000)
+  const currentFilter = filterType.value
+  filterType.value = 'all'
+  filterType.value = currentFilter
 }
 
 const filteredMetadata = computed(() => {
@@ -167,10 +164,15 @@ const onEnlargedImageLoad = (event: Event) => {
 }
 
 const resetData = async () => {
-  await fetchImages()
-  await fetchMetadata()
-  tempMetadata = JSON.parse(JSON.stringify(metadata.value))
-  isLoading.value = false
+  isLoading.value = true
+  try {
+    await fetchMetadata()
+    tempMetadata = JSON.parse(JSON.stringify(metadata.value))
+  } catch (error) {
+    console.error('Error resetting data:', error)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 onMounted(async () => {
@@ -179,6 +181,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+footer {
+  padding-top: 20px;
+}
+
 .manage-align {
   margin-top: 200px;
 }
@@ -261,11 +267,19 @@ onMounted(async () => {
   height: 20px;
 }
 
+.delete-icon {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
 .save-icon {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
 }
 

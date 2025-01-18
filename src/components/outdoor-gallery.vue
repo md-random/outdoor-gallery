@@ -187,4 +187,8 @@ button.active {
   padding: 5px;
   color: #778fd2;
 }
+
+.system-style:hover {
+  transform: scale(1.5);
+}
 </style>

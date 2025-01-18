@@ -1,17 +1,5 @@
 [
   {
-    "src": "/IMG_20231021_100553.jpg",
-    "alt": "IMG_20231021_100553",
-    "type": [
-      "Basenji",
-      "Trails",
-      "Views",
-      "Signs"
-    ],
-    "description": "OMFG",
-    "location": "Angels Landing, Zion National Park"
-  },
-  {
     "src": "/IMG_20231021_101858.jpg",
     "alt": "IMG_20231021_101858",
     "type": [
@@ -196,9 +184,12 @@
   {
     "src": "/np.jpeg",
     "alt": "np.jpeg",
-    "type": [],
-    "description": "",
-    "location": ""
+    "type": [
+      "Trails",
+      "Views"
+    ],
+    "description": "gfsgf",
+    "location": "sdfgdfsg"
   },
   {
     "src": "/np.png",
@@ -273,6 +264,13 @@
   {
     "src": "/IMG_20231207_162957-EFFECTS.jpg",
     "alt": "IMG_20231207_162957-EFFECTS.jpg",
+    "type": [],
+    "description": "",
+    "location": ""
+  },
+  {
+    "src": "/IMG_20231021_100553.jpg",
+    "alt": "IMG_20231021_100553.jpg",
     "type": [],
     "description": "",
     "location": ""

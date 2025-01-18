@@ -416,20 +416,6 @@ const goToPreviousImage = () => {
 
 ---
 
-## Directory Structure
-
-```
-public/
-  images.json      # Image metadata
-  IMG_*.jpg        # Images used in the gallery
-src/
-  components/
-    masonry-gallery.vue
-    carousel-gallery.vue
-  App.vue
-  main.ts
-```
-
 # Image Management for the Outdoor Gallery - Backend Setup
 
 This project uses a backend server built with **Node.js** and **Express** to serve image data and metadata. Below are the steps to set up and run the server.
