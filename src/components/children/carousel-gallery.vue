@@ -23,7 +23,7 @@
             </div>
           </div>
 
-          <div class="nat-park-serv-icon"><img src="/np.png" alt="" /></div>
+          <div class="nat-park-serv-icon"><img src="/templateImages/np.png" alt="" /></div>
         </div>
         <div>
           <div><span class="postcard-greeting"> Greetings from:</span></div>
