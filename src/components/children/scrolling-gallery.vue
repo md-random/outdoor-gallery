@@ -77,6 +77,7 @@ onMounted(() => {
   margin-left: 7%;
   gap: 20px;
   width: 50%;
+  margin-top: -45px;
 }
 
 .image-item {

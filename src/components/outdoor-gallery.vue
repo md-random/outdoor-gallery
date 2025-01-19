@@ -3,7 +3,13 @@
     <div class="header-display">
       <div class="header-align">
         <h1>Michael Goes Outdoors</h1>
-        <div @click="imageManage()" class="system-style">&#9881;</div>
+        <div
+          @click="imageManage()"
+          title="Image Management Change - Update and Delete Images and Metadata"
+          class="system-style"
+        >
+          &#9881;
+        </div>
       </div>
       <div class="header-align" v-if="!viewImageManagement">
         <div>
@@ -129,13 +135,11 @@ onMounted(async () => {
 }
 
 .header {
-  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   background-color: white;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(21, 6, 100, 0.31);
   height: 155px;
   padding: 10px 30px;
 }
@@ -154,7 +158,7 @@ onMounted(async () => {
 
 .header-align {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -183,7 +187,7 @@ button.active {
 }
 
 .child-container {
-  margin-top: 200px;
+  margin-top: 70px;
 }
 
 .system-style {

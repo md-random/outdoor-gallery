@@ -71,6 +71,37 @@ const syncImagesAndMetadata = () => {
   fs.writeFileSync(IMAGES_JSON_PATH, JSON.stringify(combinedMetadata, null, 2), 'utf8')
 }
 
+app.delete('/api/delete-image', (req, res) => {
+  const { src } = req.body // Image source from request body
+  console.log(`Request to delete image: ${src}`)
+
+  const imagePath = path.join(PUBLIC_DIR, src)
+  if (!fs.existsSync(imagePath)) {
+    console.log(`Image not found: ${src}`)
+    return res.status(404).json({ error: 'Image not found' })
+  }
+
+  try {
+    fs.unlinkSync(imagePath) // Delete the image
+    console.log(`Image deleted: ${src}`)
+
+    const metadataIndex = metadata.findIndex((meta) => meta.src === src)
+    if (metadataIndex === -1) {
+      console.log(`No metadata found for image ${src}`)
+      return res.status(404).json({ error: 'Metadata not found' })
+    }
+
+    metadata.splice(metadataIndex, 1) // Remove metadata
+    fs.writeFileSync(IMAGES_JSON_PATH, JSON.stringify(metadata, null, 2), 'utf8')
+    console.log(`Metadata deleted for image: ${src}`)
+
+    return res.status(200).json({ message: 'Image and metadata deleted successfully' })
+  } catch (error) {
+    console.error('Error deleting image or metadata:', error)
+    return res.status(500).json({ error: 'Failed to delete image' })
+  }
+})
+
 app.get('/test-sync', (req, res) => {
   syncImagesAndMetadata()
   res.send('Sync tested')

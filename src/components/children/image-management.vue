@@ -3,7 +3,7 @@
     <h1>Image Metadata Manager</h1>
     <div class="filter-buttons">
       <button @click="filterType = 'all'" :class="{ active: filterType === 'all' }">
-        All <span class="count-bubble">{{ allNumber }}</span>
+        All Images <span class="count-bubble">{{ allNumber }}</span>
       </button>
       <button @click="filterType = 'matched'" :class="{ active: filterType === 'matched' }">
         Matched <span class="count-bubble">{{ matchedNumber }}</span>
@@ -44,7 +44,13 @@
               </label>
             </div>
             <div>
-              <div class="delete-icon" title="Delete Image">&#9940;</div>
+              <div
+                class="delete-icon"
+                title="Delete Image"
+                @click="deleteImageAndMetadata(meta.src)"
+              >
+                &#9940;
+              </div>
               <div
                 class="save-icon"
                 title="Save Edits To Image Metadata"
@@ -86,7 +92,7 @@ const isLoading = ref(true)
 const filterType = ref<'all' | 'matched' | 'unmatched'>('all')
 const enlargedImage = ref<ImageMetadata | null>(null)
 const isImageVertical = ref<boolean>(false)
-let tempMetadata: ImageMetadata[] = []
+let tempMetadata: ImageMetadata[] = [] // specifically not reactive do not change
 const editMessage = ref<string>('')
 const allNumber = ref(0)
 const matchedNumber = ref(0)
@@ -167,6 +173,40 @@ const onEnlargedImageLoad = (event: Event) => {
   isImageVertical.value = img.naturalHeight > img.naturalWidth
 }
 
+const deleteImageAndMetadata = async (src: string) => {
+  console.log(`Attempting to delete image and metadata for ${src}`)
+
+  try {
+    const response = await fetch('http://localhost:3000/api/delete-image', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ src }),
+    })
+    console.log(response)
+    if (!response.ok) {
+      throw new Error(`Failed to delete image: ${src}`)
+    } else {
+      const result = await response.json()
+      console.log(result.message) // Logs success message
+    }
+  } catch (error) {
+    console.error('Error deleting image and metadata:', error)
+  }
+  editMessage.value = `Deleted image and meta data for: ${src}`
+  setTimeout(() => {
+    editMessage.value = ''
+  }, 3000)
+  tempMetadata = tempMetadata.filter((meta) => meta.src !== src)
+  const currentFilter = filterType.value
+  filterType.value = 'all'
+  filterType.value = 'matched'
+  filterType.value = 'unmatched'
+  setCounts(tempMetadata)
+  filterType.value = currentFilter
+}
+
 interface ImageMetadata {
   src: string
   alt: string
@@ -176,6 +216,10 @@ interface ImageMetadata {
 }
 
 const setCounts = (tempMetadata: ImageMetadata[]) => {
+  allNumber.value = 0
+  matchedNumber.value = 0
+  unmatchedNumber.value = 0
+
   tempMetadata.forEach((imageMetadata) => {
     if (imageMetadata) {
       allNumber.value++
@@ -225,12 +269,8 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-footer {
-  padding-top: 20px;
-}
-
 .manage-align {
-  margin-top: 200px;
+  margin-top: 70px;
 }
 .filter-buttons {
   margin-bottom: 20px;
@@ -380,5 +420,60 @@ span:has(textarea) {
   margin-left: 10px;
   font-size: 12px;
   display: inline-block;
+}
+
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirm-dialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.confirm-dialog .confirm-image {
+  max-width: 100px;
+  max-height: 100px;
+  margin-bottom: 10px;
+}
+
+.confirm-dialog .button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.confirm-dialog button {
+  background-color: #ff4747;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.confirm-dialog button:hover {
+  background-color: #e04040;
+}
+
+.confirm-dialog button + button {
+  background-color: #6c757d;
+}
+
+.confirm-dialog button + button:hover {
+  background-color: #565d64;
 }
 </style>
