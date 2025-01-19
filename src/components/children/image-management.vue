@@ -296,7 +296,7 @@ onMounted(async () => {
   position: relative;
   border-radius: 15px;
   color: #2a3759;
-  border: 3px ridge #2a3759;
+  border: 3px ridge #778fd2;
   box-shadow:
     -8px -8px 15px rgba(255, 255, 255, 0.5),
     8px 8px 15px rgba(0, 0, 0, 0.2);
@@ -325,7 +325,7 @@ onMounted(async () => {
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 2px ridge #2a3759;
+  border: 2px ridge #778fd2;
   box-shadow:
     inset -4px -4px rgba(255, 255, 255, 0.5),
     inset -2px -2px rgba(0, 0, 0, 0.1);
@@ -337,7 +337,7 @@ onMounted(async () => {
   align-items: center;
   max-width: 100%;
   overflow: hidden;
-  font-size: 10px;
+  font-size: calc(1px + 1vw);
   margin: 10px 0 25px 0;
 }
 
