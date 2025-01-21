@@ -44,7 +44,7 @@ const startScroll = () => {
   const container = galleryContainer.value
 
   const scrollUp = () => {
-    container.scrollTop += 3.14 / 1.7
+    container.scrollTop += 1.7
     if (container.scrollTop >= container.scrollHeight - container.clientHeight) {
       container.scrollTop = 0
     }

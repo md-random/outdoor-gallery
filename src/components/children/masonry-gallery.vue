@@ -49,34 +49,39 @@ const props = defineProps<{
   selectedType: string
 }>()
 
-const images = ref<Image[]>([])
+const fetchedImages = ref<Image[]>([])
 const displayedImages = ref<Image[]>([])
 const masonry = ref<HTMLDivElement | null>(null)
 const selectedImageIndex = ref<number | null>(null)
-const selectedType = ref<string>('')
 
 const fetchImages = async () => {
   const response = await fetch('/images.json')
   const data = await response.json()
-  images.value = data
-  console.log('Fetched Images:', images.value)
+  fetchedImages.value = data
+  console.log('Fetched Images:', fetchedImages.value)
   setImageOrientation()
   shuffleImages()
 }
 
-const setImageOrientation = () => {
-  images.value.forEach((image) => {
-    const img = new Image()
-    img.src = image.src
-    img.onload = () => {
-      image.orientation = img.height > img.width ? 'vertical' : 'horizontal'
-    }
-  })
+const setImageOrientation = async () => {
+  const promises = props.images.map(
+    (image) =>
+      new Promise<void>((resolve) => {
+        const img = new Image()
+        img.src = image.src
+        img.onload = () => {
+          image.orientation = img.height > img.width ? 'vertical' : 'horizontal'
+          resolve()
+        }
+        img.onerror = () => resolve()
+      }),
+  )
+  await Promise.all(promises)
 }
 
 const shuffleImages = () => {
-  const shuffled = [...images.value].sort(() => Math.random() - 0.5)
-  displayedImages.value = shuffled.slice(0, images.value.length)
+  const shuffled = [...props.images].sort(() => Math.random() - 0.5)
+  displayedImages.value = shuffled.slice(0, props.images.length)
 }
 
 const arrangeMasonry = async () => {
@@ -120,11 +125,6 @@ const filteredImages = computed(() => {
   return props.images.filter((image) => image.type.includes(props.selectedType))
 })
 
-watch(filteredImages, async () => {
-  await nextTick()
-  arrangeMasonry()
-})
-
 const expandImage = (image: Image) => {
   selectedImageIndex.value = displayedImages.value.findIndex((img) => img.src === image.src)
 }
@@ -147,8 +147,8 @@ onMounted(async () => {
         return new Promise<void>((resolve) => {
           if (img.complete) resolve()
           else {
-            img.onload = resolve
-            img.onerror = resolve
+            img.onload = () => resolve()
+            img.onerror = () => resolve()
           }
         })
       },
