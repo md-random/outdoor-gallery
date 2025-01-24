@@ -226,11 +226,12 @@ img {
 }
 
 h1.expanded-text {
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
 .expanded-text.description-align {
   color: #2a3759;
+  font-size: 1.1em;
 }
 
 .type-text-align {
