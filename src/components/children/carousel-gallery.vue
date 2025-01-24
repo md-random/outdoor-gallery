@@ -242,18 +242,18 @@ img {
   border: none;
   font-size: 24px;
   font-weight: 900;
-  width: 50px;
-  height: 40px;
+  width: 70px;
+  height: 60px;
   cursor: pointer;
   z-index: 2;
 }
 
 .prev-button {
-  left: -20px;
+  left: -45px;
 }
 
 .next-button {
-  right: -20px;
+  right: -45px;
 }
 
 .postcard {
@@ -285,7 +285,7 @@ img {
   font-family: 'Pacifico', serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 36px;
+  font-size: 32px;
   letter-spacing: 8px;
   display: inline-block;
   width: 100%;
@@ -314,6 +314,7 @@ img {
   width: 100%;
   height: 100%;
   text-align: end;
+  z-index: 999;
 }
 
 .nat-park-serv-icon img {

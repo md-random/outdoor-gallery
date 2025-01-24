@@ -45,11 +45,10 @@ interface Image {
 }
 
 const props = defineProps<{
-  images: Image[]
   selectedType: string
 }>()
 
-const fetchedImages = ref<Image[]>([])
+const images = ref<Image[]>([])
 const displayedImages = ref<Image[]>([])
 const masonry = ref<HTMLDivElement | null>(null)
 const selectedImageIndex = ref<number | null>(null)
@@ -57,31 +56,25 @@ const selectedImageIndex = ref<number | null>(null)
 const fetchImages = async () => {
   const response = await fetch('/images.json')
   const data = await response.json()
-  fetchedImages.value = data
-  console.log('Fetched Images:', fetchedImages.value)
+  images.value = data
+  console.log('Fetched Images:', images.value)
   setImageOrientation()
   shuffleImages()
 }
 
-const setImageOrientation = async () => {
-  const promises = props.images.map(
-    (image) =>
-      new Promise<void>((resolve) => {
-        const img = new Image()
-        img.src = image.src
-        img.onload = () => {
-          image.orientation = img.height > img.width ? 'vertical' : 'horizontal'
-          resolve()
-        }
-        img.onerror = () => resolve()
-      }),
-  )
-  await Promise.all(promises)
+const setImageOrientation = () => {
+  images.value.forEach((image) => {
+    const img = new Image()
+    img.src = image.src
+    img.onload = () => {
+      image.orientation = img.height > img.width ? 'vertical' : 'horizontal'
+    }
+  })
 }
 
 const shuffleImages = () => {
-  const shuffled = [...props.images].sort(() => Math.random() - 0.5)
-  displayedImages.value = shuffled.slice(0, props.images.length)
+  const shuffled = [...images.value].sort(() => Math.random() - 0.5)
+  displayedImages.value = shuffled.slice(0, images.value.length)
 }
 
 const arrangeMasonry = async () => {
@@ -118,11 +111,16 @@ const filteredImages = computed(() => {
   if (!props.selectedType || props.selectedType === 'All') {
     console.log('Child Filtered Images:', filteredImages.value)
     arrangeMasonry()
-    return props.images
+    return images.value
   }
   console.log('Child Filtered Images:', filteredImages.value)
   arrangeMasonry()
-  return props.images.filter((image) => image.type.includes(props.selectedType))
+  return images.value.filter((image) => image.type.includes(props.selectedType))
+})
+
+watch(filteredImages, async () => {
+  await nextTick()
+  arrangeMasonry()
 })
 
 const expandImage = (image: Image) => {
@@ -147,8 +145,8 @@ onMounted(async () => {
         return new Promise<void>((resolve) => {
           if (img.complete) resolve()
           else {
-            img.onload = () => resolve()
-            img.onerror = () => resolve()
+            img.onload = resolve
+            img.onerror = resolve
           }
         })
       },
@@ -160,11 +158,11 @@ onMounted(async () => {
   await nextTick()
   setTimeout(arrangeMasonry, 5000)
 
-  window.addEventListener('resize', arrangeMasonry)
+  window.addEventListener('resize', arrangeMasonry.bind(null))
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', arrangeMasonry)
+  window.addEventListener('resize', arrangeMasonry.bind(null))
 })
 </script>
 
