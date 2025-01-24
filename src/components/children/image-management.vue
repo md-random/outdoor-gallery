@@ -301,6 +301,7 @@ onMounted(async () => {
     -8px -8px 15px rgba(255, 255, 255, 0.5),
     8px 8px 15px rgba(0, 0, 0, 0.2);
   padding: 10px;
+  transition: transform 0.3s ease-in-out;
 }
 .image-container {
   width: auto;
@@ -313,7 +314,7 @@ onMounted(async () => {
   cursor: pointer;
   transition: 0.3s ease;
 }
-.clickable-image:hover {
+.image-item:hover {
   transform: scale(1.05);
 }
 .metadata-card {
@@ -400,6 +401,8 @@ span:has(textarea) {
 .enlarged-image {
   max-width: 100%;
   max-height: auto;
+  border-radius: 15px;
+  border: 1px ridge rgba(192, 192, 192, 0.586);
 }
 
 .fade-enter-active,
