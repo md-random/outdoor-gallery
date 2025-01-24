@@ -27,7 +27,15 @@
           :class="displayedImages[selectedImageIndex].orientation"
           loading="lazy"
         />
-        <div class="expanded-text">{{ displayedImages[selectedImageIndex].description }}</div>
+        <h1 class="expanded-text">{{ displayedImages[selectedImageIndex].location }}</h1>
+        <div class="expanded-text description-align">
+          {{ displayedImages[selectedImageIndex].description }}
+        </div>
+        <div class="type-text-align">
+          <div v-for="item in displayedImages[selectedImageIndex].type" :key="item">
+            <div class="expanded-text">{{ item }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +50,7 @@ interface Image {
   orientation: 'vertical' | 'horizontal'
   type: string[]
   description: string
+  location: string
 }
 
 const props = defineProps<{
@@ -202,10 +211,11 @@ img {
 .expanded-container {
   background: white;
   overflow: hidden;
-  padding: 10px 10px 50px;
+  padding: 10px 10px 30px;
 }
 
 .expanded-text {
+  font-family: 'Permanent Marker', serif;
   width: 100%;
   height: 40px;
   background: white;
@@ -215,11 +225,41 @@ img {
   line-height: 40px;
 }
 
-@media screen and (max-width: 768px) {
-  .expanded-container-vertical,
+h1.expanded-text {
+  font-size: 1.2em;
+}
+
+.expanded-text.description-align {
+  color: #2a3759;
+}
+
+.type-text-align {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0 15px;
+}
+
+.type-text-align div .expanded-text {
+  color: #3d5220;
+  margin: 3px;
+  text-align: end;
+  font-size: 0.8em;
+}
+
+@media screen and (min-width: 768px) {
+  .expanded-container-vertical {
+    max-width: 33vw;
+    max-height: 80vh;
+  }
+
   .expanded-container-horizontal {
-    max-width: none;
-    max-height: none;
+    max-width: 38vw;
+    max-height: 75vh;
+  }
+
+  .type-text-align {
+    left: 57%;
   }
 }
 
