@@ -310,7 +310,7 @@ onMounted(async () => {
   max-width: 100%;
   max-height: auto;
   object-fit: contain;
-  border-radius: 5%;
+  border-radius: 15px;
   cursor: pointer;
   transition: 0.3s ease;
 }
@@ -322,7 +322,7 @@ onMounted(async () => {
 }
 .metadata-card input,
 .metadata-card textarea {
-  width: 90%;
+  width: 95%;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
