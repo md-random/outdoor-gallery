@@ -64,10 +64,10 @@ interface Image {
 
 const images = ref<Image[]>([])
 const types = ['All', 'Views', 'Trails', 'Signs', 'Basenji']
-const views = ['Masonry', 'Carousel', 'Scrolling'] as const
+const views = ['Carousel', 'Masonry', 'Scrolling'] as const
 
 const selectedType = ref<string>('All')
-const selectedView = ref<'Masonry' | 'Carousel' | 'Scrolling'>('Masonry')
+const selectedView = ref<'Carousel' | 'Masonry' | 'Scrolling'>('Carousel')
 const viewImageManagement = ref<boolean>(false)
 
 const fetchImages = async () => {
@@ -127,7 +127,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Pacifico&family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Pacifico&family=Permanent+Marker&display=swap');
 * {
   font-family: 'Mulish', serif;
   font-optical-sizing: auto;

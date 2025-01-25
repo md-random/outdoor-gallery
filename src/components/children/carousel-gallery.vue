@@ -1,6 +1,6 @@
 <template>
   <div class="carousel-container">
-    <div class="carousel-image" v-if="images.length > 0">
+    <div class="carousel-image" v-if="galleryImages.length > 0">
       <button class="prev-button" @click="prevSlide">&lt;</button>
       <div
         class="carousel-image-wrapper"
@@ -22,7 +22,6 @@
               {{ type }}
             </div>
           </div>
-
           <div class="nat-park-serv-icon"><img src="/templateImages/np.png" alt="" /></div>
         </div>
         <div>
@@ -39,7 +38,7 @@
       <p>No images available</p>
     </div>
 
-    <div class="thumbnail-container" v-if="images.length > 0">
+    <div class="thumbnail-container" v-if="galleryImages.length > 0">
       <div class="thumbnail-wrapper">
         <div
           v-for="(image, index) in visibleThumbnails"
@@ -68,6 +67,7 @@ interface Image {
   type: string[]
   description: string
   orientation: 'vertical' | 'horizontal'
+  location: string
 }
 
 const props = defineProps<{
@@ -75,20 +75,20 @@ const props = defineProps<{
   selectedType: string
 }>()
 
-const images = ref<Image[]>([])
+const galleryImages = ref<Image[]>([]) // Local ref to store images
 const currentIndex = ref(0)
 const thumbnailsToShow = 9
 
-const currentImage = computed(() => images.value[currentIndex.value] || {})
+const currentImage = computed(() => galleryImages.value[currentIndex.value] || {})
 const visibleThumbnails = computed(() => {
-  const totalImages = images.value.length
+  const totalImages = galleryImages.value.length
   if (totalImages === 0) return []
 
   const start = (currentIndex.value - Math.floor(thumbnailsToShow / 2) + totalImages) % totalImages
   const thumbnails = []
 
   for (let i = 0; i < thumbnailsToShow; i++) {
-    thumbnails.push(images.value[(start + i) % totalImages])
+    thumbnails.push(galleryImages.value[(start + i) % totalImages])
   }
   return thumbnails
 })
@@ -103,12 +103,12 @@ const filteredImages = computed(() => {
 })
 
 watch(filteredImages, (newFilteredImages) => {
-  images.value = newFilteredImages
+  galleryImages.value = newFilteredImages
   currentIndex.value = 0
 })
 
 const setImageOrientation = () => {
-  images.value.forEach((image) => {
+  galleryImages.value.forEach((image) => {
     const img = new Image()
     img.src = image.src
     img.onload = () => {
@@ -118,24 +118,25 @@ const setImageOrientation = () => {
 }
 
 const nextSlide = () => {
-  if (images.value.length === 0) return
-  currentIndex.value = (currentIndex.value + 1) % images.value.length
+  if (galleryImages.value.length === 0) return
+  currentIndex.value = (currentIndex.value + 1) % galleryImages.value.length
 }
 
 const prevSlide = () => {
-  if (images.value.length === 0) return
-  currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length
+  if (galleryImages.value.length === 0) return
+  currentIndex.value =
+    (currentIndex.value - 1 + galleryImages.value.length) % galleryImages.value.length
 }
 
 const jumpToSlide = (index: number) => {
-  const totalImages = images.value.length
+  const totalImages = galleryImages.value.length
   if (totalImages === 0) return
   currentIndex.value =
     (index + currentIndex.value - middleThumbnailIndex + totalImages) % totalImages
 }
 
 onMounted(() => {
-  images.value = filteredImages.value
+  galleryImages.value = filteredImages.value
   setImageOrientation()
 })
 </script>
@@ -146,16 +147,16 @@ onMounted(() => {
 }
 
 .carousel-image {
+  width: 90%;
+  margin: 0 auto;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 100%;
 }
 
 .carousel-image-wrapper.vertical-container {
-  height: 55vh;
+  height: 50vh;
   outline: 4px ridge #778fd2;
   padding: 2px;
   background-color: #b7cb99;
@@ -260,11 +261,11 @@ img {
   width: 33%;
   padding: 10px 10px 20px;
   margin: 20px auto;
-  border: 2px solid #d4c4aa; /* Light tan border */
+  border: 2px solid #d4c4aa;
   border-radius: 10px;
-  background: linear-gradient(145deg, #fdfdfd, #f2ebd8); /* Soft background gradient */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  font-family: 'Courier New', Courier, monospace; /* Typewriter-style font */
+  background: linear-gradient(145deg, #fdfdfd, #f2ebd8);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  font-family: 'Atma', serif;
   color: #4a4a4a;
   text-align: left;
 }
@@ -274,7 +275,7 @@ img {
   font-weight: bold;
   text-align: center;
   color: #431d32;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for a raised look */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   margin-bottom: 15px;
   padding-bottom: 20px;
   top: -20px;
@@ -297,6 +298,7 @@ img {
 }
 
 .postcard-text {
+  font-family: 'Atma', serif;
   font-size: 1rem;
   font-style: italic;
   color: #4a4a4a;
@@ -325,7 +327,7 @@ img {
 }
 
 .current-type {
-  font-size: 12px;
+  font-size: 8px;
   letter-spacing: 3px;
   text-decoration: underline;
   text-underline-offset: 2px;
