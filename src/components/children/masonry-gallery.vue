@@ -154,8 +154,6 @@ onMounted(async () => {
         return new Promise<void>((resolve) => {
           if (img.complete) resolve()
           else {
-            img.onload = resolve
-            img.onerror = resolve
           }
         })
       },
@@ -171,7 +169,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  window.addEventListener('resize', arrangeMasonry.bind(null))
+  window.removeEventListener('resize', arrangeMasonry.bind(null))
 })
 </script>
 

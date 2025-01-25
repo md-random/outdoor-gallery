@@ -237,7 +237,7 @@ img {
   top: 50%;
   transform: translateY(-50%);
   background-color: #2a3759;
-  border-radius: 12px;
+  border-radius: 50%;
   color: #b7cb99;
   border: none;
   font-size: 24px;

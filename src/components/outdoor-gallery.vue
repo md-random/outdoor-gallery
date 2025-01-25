@@ -115,7 +115,9 @@ const imageManage = () => {
 }
 
 const syncMetadata = async () => {
-  await fetch('/api/metadata')
+  const x = await fetch('http://localhost:3000/api/metadata')
+  console.log('x', x)
+  return x
 }
 
 onMounted(async () => {
