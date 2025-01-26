@@ -1,7 +1,7 @@
 <template>
   <div class="carousel-container">
     <div class="carousel-image" v-if="galleryImages.length > 0">
-      <button class="prev-button" @click="prevSlide">&lt;</button>
+      <button class="prev-button" @click="prevSlide">{{ nextButtonIcon }}</button>
       <div
         class="carousel-image-wrapper"
         :class="
@@ -25,14 +25,14 @@
           <div class="nat-park-serv-icon"><img src="/templateImages/np.png" alt="" /></div>
         </div>
         <div>
-          <div><span class="postcard-greeting"> Greetings from:</span></div>
+          <div><span class="postcard-greeting"> Greetings from</span></div>
           <div class="postcard-header">{{ currentImage.location }}!</div>
         </div>
         <div class="postcard-text">
           {{ currentImage.description }}
         </div>
       </div>
-      <button class="next-button" @click="nextSlide">&gt;</button>
+      <button class="next-button" @click="nextSlide">{{ nextButtonIcon }}</button>
     </div>
     <div class="carousel-image" v-else>
       <p>No images available</p>
@@ -75,7 +75,7 @@ const props = defineProps<{
   selectedType: string
 }>()
 
-const galleryImages = ref<Image[]>([]) // Local ref to store images
+const galleryImages = ref<Image[]>([])
 const currentIndex = ref(0)
 const thumbnailsToShow = 9
 
@@ -134,6 +134,22 @@ const jumpToSlide = (index: number) => {
   currentIndex.value =
     (index + currentIndex.value - middleThumbnailIndex + totalImages) % totalImages
 }
+
+const nextButtonIcon = computed(() => {
+  console.log('props.selectedType', props.selectedType)
+  switch (props.selectedType) {
+    case 'Views':
+      return String.fromCodePoint(127956) // view icon
+    case 'Trails':
+      return String.fromCodePoint(127957) // trail icon
+    case 'Signs':
+      return String.fromCodePoint(128655) // sign icon
+    case 'Basenji':
+      return String.fromCodePoint(128021) // dog icon
+    default:
+      return String.fromCodePoint(128506) // Default arrow
+  }
+})
 
 onMounted(() => {
   galleryImages.value = filteredImages.value
@@ -237,16 +253,15 @@ img {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #2a3759;
-  border-radius: 50%;
-  color: #b7cb99;
+  background-color: white;
   border: none;
-  font-size: 24px;
+  font-size: 60px;
   font-weight: 900;
   width: 70px;
   height: 60px;
   cursor: pointer;
   z-index: 2;
+  transition: all 0.5s ease-in-out;
 }
 
 .prev-button {
@@ -255,6 +270,13 @@ img {
 
 .next-button {
   right: -45px;
+}
+
+.prev-button:hover,
+.next-button:hover {
+  top: 43%;
+
+  transform: scale(1.2);
 }
 
 .postcard {
