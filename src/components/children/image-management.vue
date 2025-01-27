@@ -283,6 +283,7 @@ onMounted(async () => {
   color: #2a3759;
   border: none;
   border-radius: 7px;
+  font-size: 16px;
 }
 .filter-buttons button.active {
   color: #b7cb99;
@@ -419,7 +420,6 @@ span:has(textarea) {
   border-radius: 50%;
   padding: 5px 5px;
   margin-left: 10px;
-  font-size: 16px;
   display: inline-block;
 }
 
