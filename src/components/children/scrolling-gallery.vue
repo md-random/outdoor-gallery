@@ -1,14 +1,26 @@
 <template>
-  <div class="moving-gallery" ref="galleryContainer">
-    <div
-      class="image-item"
-      v-for="(image, index) in filteredImages"
-      :key="index"
-      :class="image.orientation"
-      @mouseenter="pauseScroll"
-      @mouseleave="resumeScroll"
-    >
-      <img :src="image.src" :alt="image.alt" />
+  <div class="gallery-wrapper">
+    <div class="moving-gallery" ref="galleryContainer">
+      <div
+        class="image-item"
+        v-for="(image, index) in filteredImages"
+        :key="index"
+        :class="image.orientation"
+        @mouseenter="handleMouseEnter(image)"
+        @mouseleave="handleMouseLeave"
+      >
+        <img :src="image.src" :alt="image.alt" />
+      </div>
+    </div>
+    <div class="scroll-metadata" v-if="currentImage">
+      <div>Location: {{ currentImage.location }}</div>
+      <div>Description{{ currentImage.description }}</div>
+      <div>
+        <span>Type: </span>
+        <span v-for="(type, index) in currentImage.type" :key="index">
+          {{ type }}<span v-if="index < currentImage.type.length - 1">, </span>,
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +34,7 @@ interface Image {
   description: string
   type: string[]
   orientation: 'horizontal' | 'vertical'
+  location: string
 }
 
 const props = defineProps<{
@@ -31,6 +44,17 @@ const props = defineProps<{
 
 const galleryContainer = ref<HTMLDivElement | null>(null)
 let scrollAnimationFrame: number | null = null
+const currentImage = ref<Image | null>(null)
+
+const handleMouseEnter = (image: Image) => {
+  currentImage.value = image
+  pauseScroll()
+}
+
+const handleMouseLeave = () => {
+  currentImage.value = null
+  resumeScroll()
+}
 
 const filteredImages = computed(() => {
   if (!props.selectedType || props.selectedType === 'All') {
@@ -113,5 +137,37 @@ onMounted(() => {
   object-fit: cover;
   border-radius: 8px;
   display: block;
+  background-color: #f6f0f0;
+  box-shadow:
+    12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+    -8px -8px 12px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+}
+
+.gallery-wrapper {
+  display: flex;
+  flex-direction: row;
+  font-family: 'Tomorrow', serif;
+  font-weight: 600;
+  color: #2a3759;
+}
+
+.scroll-metadata {
+  padding: 25px 25px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background-color: #f6f0f0;
+  box-shadow:
+    12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+    -8px -8px 12px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  height: 30%;
+  width: 30%;
+  margin-top: 15%;
+}
+
+.scroll-metadata div {
+  padding: 10px 0;
 }
 </style>
