@@ -280,11 +280,12 @@ onMounted(async () => {
   padding: 5px 10px;
   cursor: pointer;
   background-color: #b7cb99;
-  color: white;
+  color: #2a3759;
   border: none;
-  border-radius: 4px;
+  border-radius: 7px;
 }
 .filter-buttons button.active {
+  color: #b7cb99;
   background-color: #2a3759;
 }
 .image-grid {
@@ -338,7 +339,7 @@ onMounted(async () => {
   align-items: center;
   max-width: 100%;
   overflow: hidden;
-  font-size: calc(1px + 1vw);
+  font-size: calc(1px + 0.85vw);
   margin: 10px 0 25px 0;
 }
 
@@ -415,13 +416,10 @@ span:has(textarea) {
 }
 
 .count-bubble {
-  border: 2px solid #431d32;
-  background-color: #778fd2;
-  color: white;
   border-radius: 50%;
   padding: 5px 5px;
   margin-left: 10px;
-  font-size: 12px;
+  font-size: 16px;
   display: inline-block;
 }
 

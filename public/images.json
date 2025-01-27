@@ -144,7 +144,9 @@
   {
     "src": "/IMG20240420132831.jpg",
     "alt": "IMG20240420132831.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },
@@ -452,7 +454,9 @@
   {
     "src": "/IMG_20180108_102726.jpg",
     "alt": "IMG_20180108_102726.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },
@@ -480,7 +484,9 @@
   {
     "src": "/IMG_20190424_144848978_HDR.jpg",
     "alt": "IMG_20190424_144848978_HDR.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },
@@ -536,7 +542,9 @@
   {
     "src": "/IMG_20200426_121704468.jpg",
     "alt": "IMG_20200426_121704468.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },
@@ -669,7 +677,9 @@
   {
     "src": "/IMG_20211116_155542220-EFFECTS.jpg",
     "alt": "IMG_20211116_155542220-EFFECTS.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },

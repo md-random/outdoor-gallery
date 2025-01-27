@@ -147,7 +147,7 @@ const nextButtonIcon = computed(() => {
     case 'Basenji':
       return String.fromCodePoint(128021) // dog icon
     default:
-      return String.fromCodePoint(128506) // Default arrow
+      return String.fromCodePoint(127760) // Default arrow
   }
 })
 
