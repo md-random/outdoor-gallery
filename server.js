@@ -2,6 +2,10 @@ import express from 'express'
 import fs from 'fs'
 import path from 'path'
 import cors from 'cors'
+import multer from 'multer'
+import sharp from 'sharp'
+
+const upload = multer({ dest: 'uploads/' }) // Temporary storage for uploaded files
 
 const app = express()
 const PUBLIC_DIR = path.join(new URL('.', import.meta.url).pathname, 'public')
@@ -105,6 +109,35 @@ app.delete('/api/delete-image', (req, res) => {
 app.get('/test-sync', (req, res) => {
   syncImagesAndMetadata()
   res.send('Sync tested')
+})
+
+app.post('/api/optimize-images', upload.array('images'), async (req, res) => {
+  try {
+    const optimizedImages = []
+
+    for (const file of req.files) {
+      const inputPath = file.path
+      const outputPath = path.join(PUBLIC_DIR, file.originalname)
+
+      // Optimize image using Sharp
+      await sharp(inputPath)
+        .resize({ width: 1920, withoutEnlargement: true }) // Resize
+        .toFormat('jpeg', { quality: 70, progressive: true }) // Compress
+        .toFile(outputPath)
+
+      optimizedImages.push({
+        optimizedPath: `/public/${file.originalname}`,
+        size: fs.statSync(outputPath).size, // Optimized size
+      })
+
+      fs.unlinkSync(inputPath) // Remove temporary file
+    }
+
+    res.status(200).json({ message: 'Images optimized successfully', optimizedImages })
+  } catch (error) {
+    console.error('Error optimizing images:', error)
+    res.status(500).json({ error: 'Failed to optimize images' })
+  }
 })
 
 app.use(express.static(PUBLIC_DIR))

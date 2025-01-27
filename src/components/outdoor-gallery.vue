@@ -3,17 +3,20 @@
     <div class="header-display">
       <div class="header-align">
         <h1>Michael Goes Outdoors</h1>
+        <div @click="toggleManager('metadata')" title="Image Metadata Manager" class="system-style">
+          Metadata Manager
+        </div>
         <div
-          @click="imageManage()"
-          title="Image Management Change - Update and Delete Images and Metadata"
+          @click="toggleManager('process')"
+          title="Image Processing Manager"
           class="system-style"
         >
-          &#9881;
+          Processing Manager
         </div>
       </div>
-      <div class="header-align" v-if="!viewImageManagement">
+      <div v-if="!isManagerActive" class="image-style-align">
         <div>
-          <div class="header-display">What do you want to see?</div>
+          <div class="selection-align">Image</div>
           <button
             v-for="type in types"
             :key="type"
@@ -24,9 +27,8 @@
             {{ type }}
           </button>
         </div>
-
         <div>
-          <div class="header-display">How do you want to view it?</div>
+          <div class="selection-align">Style</div>
           <button
             v-for="view in views"
             :key="view"
@@ -40,11 +42,18 @@
       </div>
     </div>
   </div>
-  <div class="child-container" v-if="!viewImageManagement">
-    <component :is="currentComponent" :images="filteredImages" :selectedType="selectedType" />
-  </div>
 
-  <div v-else><Manage /></div>
+  <!-- Render children -->
+  <div class="child-container">
+    <component
+      v-if="!isManagerActive"
+      :is="currentComponent"
+      :images="filteredImages"
+      :selectedType="selectedType"
+    />
+    <Manage v-else-if="activeManager === 'metadata'" />
+    <Process v-else-if="activeManager === 'process'" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -53,6 +62,7 @@ import Masonry from './children/masonry-gallery.vue'
 import Carousel from './children/carousel-gallery.vue'
 import Scrolling from './children/scrolling-gallery.vue'
 import Manage from './children/image-management.vue'
+import Process from './children/image-processing.vue'
 
 interface Image {
   src: string
@@ -69,6 +79,12 @@ const views = ['Carousel', 'Masonry', 'Scrolling'] as const
 const selectedType = ref<string>('All')
 const selectedView = ref<'Carousel' | 'Masonry' | 'Scrolling'>('Carousel')
 const viewImageManagement = ref<boolean>(false)
+const activeManager = ref<'metadata' | 'process' | null>(null)
+const isManagerActive = computed(() => activeManager.value !== null)
+
+const toggleManager = (manager: 'metadata' | 'process') => {
+  activeManager.value = manager
+}
 
 const fetchImages = async () => {
   const response = await fetch('/images.json')
@@ -193,13 +209,24 @@ button.active {
 }
 
 .system-style {
-  font-size: 30px;
+  font-size: 24px;
   cursor: pointer;
   padding: 5px;
   color: #778fd2;
 }
 
 .system-style:hover {
-  transform: scale(1.5);
+  transform: scale(1.1);
+}
+
+.selection-align {
+  padding: 5px;
+  font-size: 22px;
+}
+
+.image-style-align {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
