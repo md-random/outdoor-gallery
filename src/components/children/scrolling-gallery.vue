@@ -14,7 +14,7 @@
     </div>
     <div class="scroll-metadata" v-if="currentImage">
       <div>Location: {{ currentImage.location }}</div>
-      <div>Description{{ currentImage.description }}</div>
+      <div>Description: {{ currentImage.description }}</div>
       <div>
         <span>Type: </span>
         <span v-for="(type, index) in currentImage.type" :key="index">

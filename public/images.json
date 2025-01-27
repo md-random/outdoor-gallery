@@ -455,10 +455,11 @@
     "src": "/IMG_20180108_102726.jpg",
     "alt": "IMG_20180108_102726.jpg",
     "type": [
-      "Basenji"
+      "Basenji",
+      "Views"
     ],
-    "description": "",
-    "location": ""
+    "description": "Frida & Zuzu chilling lake side ",
+    "location": "Red Feather Lakes, Colorado"
   },
   {
     "src": "/IMG_20190424_131235182_HDR.jpg",
@@ -572,7 +573,9 @@
   {
     "src": "/IMG_20200530_114157853.jpg",
     "alt": "IMG_20200530_114157853.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },
@@ -693,7 +696,9 @@
   {
     "src": "/IMG_20220214_154732614.jpg",
     "alt": "IMG_20220214_154732614.jpg",
-    "type": [],
+    "type": [
+      "Basenji"
+    ],
     "description": "",
     "location": ""
   },
