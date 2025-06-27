@@ -129,6 +129,17 @@ const filteredImages = computed(() => {
 
 watch(filteredImages, async () => {
   await nextTick()
+  if (!masonry.value) return
+  const imgs = Array.from(masonry.value.querySelectorAll('img'))
+  await Promise.all(
+    imgs.map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          if (img.complete) resolve()
+          else img.onload = () => resolve()
+        }),
+    ),
+  )
   arrangeMasonry()
 })
 
@@ -139,11 +150,6 @@ const expandImage = (image: Image) => {
 const closeImage = () => {
   selectedImageIndex.value = null
 }
-
-watch(filteredImages, async () => {
-  await nextTick()
-  arrangeMasonry()
-})
 
 onMounted(async () => {
   await fetchImages()

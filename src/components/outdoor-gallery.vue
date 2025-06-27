@@ -61,6 +61,7 @@ import { ref, computed, onMounted } from 'vue'
 import Masonry from './children/masonry-gallery.vue'
 import Carousel from './children/carousel-gallery.vue'
 import Scrolling from './children/scrolling-gallery.vue'
+import Grid from './children/grid-gallery.vue'
 import Manage from './children/image-management.vue'
 import Process from './children/image-processing.vue'
 
@@ -74,10 +75,10 @@ interface Image {
 
 const images = ref<Image[]>([])
 const types = ['All', 'Views', 'Trails', 'Signs', 'Basenji']
-const views = ['Carousel', 'Masonry', 'Scrolling'] as const
+const views = ['Carousel', 'Masonry', 'Scrolling', 'Grid'] as const
 
 const selectedType = ref<string>('All')
-const selectedView = ref<'Carousel' | 'Masonry' | 'Scrolling'>('Carousel')
+const selectedView = ref<'Carousel' | 'Masonry' | 'Scrolling' | 'Grid'>('Carousel')
 const viewImageManagement = ref<boolean>(false)
 const activeManager = ref<'metadata' | 'process' | null>(null)
 const isManagerActive = computed(() => activeManager.value !== null)
@@ -114,6 +115,7 @@ const componentsMap = {
   Masonry,
   Carousel,
   Scrolling,
+  Grid,
 }
 
 const currentComponent = computed(() => componentsMap[selectedView.value])

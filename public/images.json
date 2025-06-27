@@ -1272,7 +1272,9 @@
   {
     "src": "/IMG_20231105_094617.jpg",
     "alt": "IMG_20231105_094617.jpg",
-    "type": [],
+    "type": [
+      "Signs"
+    ],
     "description": "",
     "location": ""
   },

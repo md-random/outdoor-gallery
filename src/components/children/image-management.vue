@@ -33,7 +33,6 @@
             <span> Location:</span>
             <input v-model="meta.location" placeholder="Location" />
             <div class="type-container">
-              <span> Type:</span>
               <label v-for="type in allowedTypes" :key="type" class="type-checkbox">
                 <input
                   type="checkbox"
@@ -340,7 +339,7 @@ onMounted(async () => {
   align-items: center;
   max-width: 100%;
   overflow: hidden;
-  font-size: calc(1px + 0.85vw);
+  font-size: calc(1px + 0.65vw);
   margin: 10px 0 25px 0;
 }
 
