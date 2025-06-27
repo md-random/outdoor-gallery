@@ -40,7 +40,7 @@ defineProps<{
 
 .gallery-image {
   width: 100%;
-  height: auto;
+  height: 300px;
   display: block;
   object-fit: cover;
   transition: transform 0.3s ease-in-out;
