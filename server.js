@@ -4,6 +4,8 @@ import path from 'path'
 import cors from 'cors'
 import multer from 'multer'
 import sharp from 'sharp'
+import { EventEmitter } from 'events'
+const progressEmitter = new EventEmitter()
 
 const upload = multer({ dest: 'uploads/' }) // Temporary storage for uploaded files
 
@@ -121,16 +123,38 @@ app.post('/api/optimize-images', upload.array('images'), async (req, res) => {
 
       // Optimize image using Sharp
       await sharp(inputPath)
-        .resize({ width: 1920, withoutEnlargement: true }) // Resize
-        .toFormat('jpeg', { quality: 70, progressive: true }) // Compress
+        .resize({ width: 1920, withoutEnlargement: true })
+        .toFormat('jpeg', { quality: 70, progressive: true })
         .toFile(outputPath)
 
-      optimizedImages.push({
-        optimizedPath: `/public/${file.originalname}`,
-        size: fs.statSync(outputPath).size, // Optimized size
+      progressEmitter.emit('progress', {
+        file: file.originalname,
+        originalSize: fs.statSync(inputPath).size,
+        optimizedSize: fs.statSync(outputPath).size,
       })
 
-      fs.unlinkSync(inputPath) // Remove temporary file
+      // Get optimized size
+      const stats = fs.statSync(outputPath)
+
+      // Broadcast progress to SSE clients
+      const progressUpdate = {
+        file: file.originalname,
+        originalSize: file.size,
+        optimizedSize: stats.size,
+      }
+
+      sseClients.forEach((client) => {
+        client.write(`data: ${JSON.stringify(progressUpdate)}\n\n`)
+      })
+
+      // Add to response array
+      optimizedImages.push({
+        optimizedPath: `/${file.originalname}`,
+        size: stats.size,
+      })
+
+      // Remove temp file
+      fs.unlinkSync(inputPath)
     }
 
     res.status(200).json({ message: 'Images optimized successfully', optimizedImages })
@@ -141,6 +165,49 @@ app.post('/api/optimize-images', upload.array('images'), async (req, res) => {
 })
 
 app.use(express.static(PUBLIC_DIR))
+
+let sseClients = []
+
+app.get('/api/optimize-progress', (req, res) => {
+  res.writeHead(200, {
+    Connection: 'keep-alive',
+    'Cache-Control': 'no-cache',
+    'Content-Type': 'text/event-stream',
+  })
+
+  sseClients.push(res)
+
+  const onProgress = (update) => {
+    res.write(`data: ${JSON.stringify(update)}\n\n`)
+  }
+
+  progressEmitter.on('progress', onProgress)
+
+  req.on('close', () => {
+    progressEmitter.off('progress', onProgress)
+    sseClients = sseClients.filter((client) => client !== res)
+  })
+})
+
+app.get('/api/thumbnail', async (req, res) => {
+  const file = req.query.file
+  if (!file) return res.status(400).send('Missing file parameter')
+
+  const imagePath = path.join(PUBLIC_DIR, file)
+  if (!fs.existsSync(imagePath)) return res.status(404).send('File not found')
+
+  try {
+    const thumbnail = await sharp(imagePath)
+      .resize(100, 100, { fit: 'cover' })
+      .jpeg({ quality: 80 })
+      .toBuffer()
+
+    res.type('image/jpeg')
+    res.send(thumbnail)
+  } catch {
+    res.status(500).send('Error generating thumbnail')
+  }
+})
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`)
