@@ -1,52 +1,63 @@
 <template>
-  <div class="image-upload-wrapper">
-    <h2>Upload and Optimize Images</h2>
-    <div class="dropzone" @dragover.prevent @drop.prevent="handleDrop">
-      <p>Drag and drop images here, or click to select files.</p>
-      <input type="file" accept="image/*" multiple @change="handleFileSelect" />
-    </div>
+  <div class="upload-container">
+    <div class="file-list" v-if="files.length > 0">
+      <h3>Files</h3>
+      <div v-for="(file, index) in files" :key="file.name" class="file-item">
+        <img
+          :src="`http://localhost:3000/api/thumbnail?file=${encodeURIComponent(file.name)}`"
+          alt="thumb"
+          class="thumb"
+        />
 
-    <!-- File Preview Section -->
-    <div class="upload-list" v-if="files.length > 0">
-      <h3>Files to Optimize</h3>
-      <div v-for="(file, index) in files" :key="index" class="upload-item">
-        <div class="file-info">
-          <span>{{ file.name }}</span>
-          <span>Original: {{ (file.size / 1000).toFixed(2) }} KB</span>
+        <div class="file-text">
+          <span>{{ file.name }}</span
+          ><br />
+          <span CLASS="file-size">
+            {{ (file.size / 1000).toFixed(1) }} KB
+            <template v-if="progressUpdatesMap[file.name]">
+              →
+              {{ (progressUpdatesMap[file.name].optimizedSize / 1000).toFixed(1) }} KB (
+              {{
+                (
+                  100 -
+                  (progressUpdatesMap[file.name].optimizedSize /
+                    progressUpdatesMap[file.name].originalSize) *
+                    100
+                ).toFixed(1)
+              }}
+              %)
+            </template>
+          </span>
         </div>
-        <img :src="previews[index]" alt="preview" class="preview" />
-        <button @click="removeFile(index)">Remove</button>
+        <button v-if="!isUploading" @click="removeFile(index)">Remove</button>
       </div>
     </div>
 
-    <button
-      class="upload-button"
-      :disabled="files.length === 0 || isUploading"
-      @click="uploadFiles"
-    >
-      {{ isUploading ? 'Uploading...' : 'Optimize and Upload' }}
-    </button>
-
-    <!-- Display Optimized Images -->
-    <div class="optimized-list" v-if="optimizedImages.length > 0">
-      <h3>Optimized Images</h3>
-      <div v-for="image in optimizedImages" :key="image.optimizedPath" class="optimized-item">
-        <a :href="'http://localhost:3000' + image.optimizedPath" target="_blank">
-          <img :src="'http://localhost:3000' + image.optimizedPath" alt="optimized preview" />
-        </a>
-        <span>Size: {{ (image.size / 1000).toFixed(2) }} KB</span>
+    <div class="center-area">
+      <h2>Upload and Optimize Images</h2>
+      <p class="meta-data">meta-data from image will be stripped out.</p>
+      <div class="dropzone" @dragover.prevent @drop.prevent="handleDrop">
+        <p>Drag and drop images here, or click to select files.</p>
+        <input type="file" accept="image/*" multiple @change="handleFileSelect" />
       </div>
+      <button
+        class="upload-button"
+        :disabled="files.length === 0 || isUploading"
+        @click="uploadFiles"
+      >
+        {{ isUploading ? 'Uploading...' : 'Optimize and Upload' }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const files = ref<File[]>([])
 const previews = ref<string[]>([])
-const optimizedImages = ref<{ optimizedPath: string; size: number }[]>([])
 const isUploading = ref(false)
+const progressUpdatesMap = ref<Record<string, { optimizedSize: number; originalSize: number }>>({})
 
 const handleDrop = (event: DragEvent) => {
   const droppedFiles = event.dataTransfer?.files
@@ -86,29 +97,102 @@ const uploadFiles = async () => {
 
     if (!response.ok) throw new Error('Failed to upload and optimize images.')
 
-    const result = await response.json()
-    optimizedImages.value = result.optimizedImages
+    await response.json()
 
-    // Clear the files and previews
     files.value = []
     previews.value = []
-    alert('Images optimized and uploaded successfully!')
   } catch (error) {
     console.error('Error uploading files:', error)
-    alert('Failed to optimize and upload images.')
   } finally {
     isUploading.value = false
   }
 }
+
+onMounted(() => {
+  const eventSource = new EventSource('http://localhost:3000/api/optimize-progress')
+  eventSource.onmessage = (event) => {
+    const update = JSON.parse(event.data)
+    progressUpdatesMap.value[update.file] = {
+      optimizedSize: update.optimizedSize,
+      originalSize: update.originalSize,
+    }
+  }
+})
 </script>
 
 <style scoped>
-.image-upload-wrapper {
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px;
+  padding: 20px;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.file-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-size {
+  font-size: 12px;
+  color: #666;
+}
+
+.meta-data {
+  font-size: 12px;
+  color: crimson;
+  font-weight: 800;
+  margin: 0 !important;
+}
+
+button {
+  padding: 6px 10px;
+  background-color: #f44336;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.center-area {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  font-family: Arial, sans-serif;
+  min-width: 320px;
 }
 
 .dropzone {
@@ -116,8 +200,7 @@ const uploadFiles = async () => {
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  width: 100%;
-  max-width: 400px;
+  width: 320px;
   background-color: #f9f9f9;
   transition: background-color 0.3s;
 }
@@ -128,35 +211,6 @@ const uploadFiles = async () => {
 
 input[type='file'] {
   display: none;
-}
-
-.upload-list,
-.optimized-list {
-  width: 100%;
-  max-width: 400px;
-}
-
-.upload-item,
-.optimized-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.file-info,
-.optimized-item span {
-  margin-top: 8px;
-  text-align: center;
-}
-
-.preview,
-.optimized-item img {
-  max-width: 100px;
-  max-height: 100px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  border-radius: 8px;
 }
 
 .upload-button {

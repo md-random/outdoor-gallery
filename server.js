@@ -198,8 +198,9 @@ app.get('/api/thumbnail', async (req, res) => {
 
   try {
     const thumbnail = await sharp(imagePath)
-      .resize(100, 100, { fit: 'cover' })
-      .jpeg({ quality: 80 })
+      .resize(200, 200, { fit: 'cover' })
+      .jpeg({ quality: 90, mozjpeg: true, chromaSubsampling: '4:4:4' })
+      .sharpen()
       .toBuffer()
 
     res.type('image/jpeg')
