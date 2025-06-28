@@ -2,34 +2,15 @@
   {
     "src": "/IMG20240405105217.jpg",
     "alt": "IMG20240405105217.jpg",
-    "type": [],
-    "description": "",
-    "location": ""
-  },
-  {
-    "src": "/IMG20240405112712.jpg",
-    "alt": "IMG20240405112712.jpg",
-    "type": [],
-    "description": "",
-    "location": ""
+    "type": [
+      "Views"
+    ],
+    "description": "Bandolier Nat Park",
+    "location": "New Mexico"
   },
   {
     "src": "/IMG20240405112917.jpg",
     "alt": "IMG20240405112917.jpg",
-    "type": [],
-    "description": "",
-    "location": ""
-  },
-  {
-    "src": "/IMG20240405113211.jpg",
-    "alt": "IMG20240405113211.jpg",
-    "type": [],
-    "description": "",
-    "location": ""
-  },
-  {
-    "src": "/IMG20240405113900.jpg",
-    "alt": "IMG20240405113900.jpg",
     "type": [],
     "description": "",
     "location": ""
@@ -42,22 +23,8 @@
     "location": ""
   },
   {
-    "src": "/IMG20240405114353.jpg",
-    "alt": "IMG20240405114353.jpg",
-    "type": [],
-    "description": "",
-    "location": ""
-  },
-  {
-    "src": "/IMG20240405115954.jpg",
-    "alt": "IMG20240405115954.jpg",
-    "type": [],
-    "description": "",
-    "location": ""
-  },
-  {
-    "src": "/IMG20240405120003.jpg",
-    "alt": "IMG20240405120003.jpg",
+    "src": "/IMG20240413085058.jpg",
+    "alt": "IMG20240413085058.jpg",
     "type": [],
     "description": "",
     "location": ""
@@ -1911,6 +1878,13 @@
   {
     "src": "/IMG20241102142308.jpg",
     "alt": "IMG20241102142308.jpg",
+    "type": [],
+    "description": "",
+    "location": ""
+  },
+  {
+    "src": "/IMG20240405120003.jpg",
+    "alt": "IMG20240405120003.jpg",
     "type": [],
     "description": "",
     "location": ""

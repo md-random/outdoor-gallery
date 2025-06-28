@@ -4,14 +4,14 @@
       <div class="header-align">
         <h1>Michael Goes Outdoors</h1>
         <div @click="toggleManager('metadata')" title="Image Metadata Manager" class="system-style">
-          Metadata Manager
+          Image Metadata Manager
         </div>
         <div
           @click="toggleManager('process')"
           title="Image Processing Manager"
           class="system-style"
         >
-          Processing Manager
+          Image Processing Manager
         </div>
       </div>
       <div v-if="!isManagerActive" class="image-style-align">
